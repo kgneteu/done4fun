@@ -51,27 +51,32 @@ export default function Home(props) {
                 <li><Link href={"/contact"}>{t('Contact')}</Link></li>
                 <li><Link href={"/dashboard"}>{t('Dashboard')}</Link></li>
             </ul>
-            {/*<Trailers posts={posts}/>*/}
+            <Trailers posts={posts}/>
         </>
     )
 }
 
-export async function getStaticProps({locale, ...context}) {
-    // const posts = await getResourceCollectionFromContext(
-    //     'node--article',
-    //     context,
-    //     {
-    //         params: {
-    //             include: 'field_image,uid,uid.user_picture',
-    //             sort: '-created',
-    //             "filter[status]": "1",
-    //         },
-    //     }
-    // )
-    const posts = null;
+export async function getStaticProps(context) {
+    let posts = null
+    try {
+        posts = await getResourceCollectionFromContext(
+            'node--article',
+            context,
+            {
+                params: {
+                    include: 'field_image,uid,uid.user_picture',
+                    sort: '-created',
+                    "filter[status]": "1",
+                },
+            }
+        )
+    } catch (e) {
+        console.log(e.message)
+    }
+
     return {
         props: {
-            ...(await serverSideTranslations(locale, ['common'])),
+            ...(await serverSideTranslations(context.locale, ['common'])),
             // Will be passed to the page component as props
             posts: posts
         },

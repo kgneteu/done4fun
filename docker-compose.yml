@@ -25,7 +25,8 @@ services:
     networks:
       - done4fun
   drupal:
-    image: drupal:9.3-php7.4
+    build:
+      context: ./docker/drupal
     env_file:
       - ./docker/drupal/.env
     ports:
