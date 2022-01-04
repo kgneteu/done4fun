@@ -6,7 +6,7 @@ import {getResourceCollectionFromContext} from "next-drupal";
 import * as PropTypes from "prop-types";
 
 function Trailers({posts = null}) {
-    console.log(posts)
+
     if (!posts || posts.length == 0) {
         return null
     } else {
@@ -23,14 +23,8 @@ function Trailers({posts = null}) {
     }
 }
 
-
-// <div key={post.id}>
-//     <h1>{post.title}</h1>
-//     <div>
-//         <div>{post.body}</div>
-//     </div>
-//
 Trailers.propTypes = {posts: PropTypes.array};
+
 export default function Home(props) {
     const {data: session, status} = useSession()
     const loading = status === 'loading'
