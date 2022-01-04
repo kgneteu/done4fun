@@ -1,0 +1,7 @@
+/drupal/keys
+/drupal/web/sites/default/files/css
+/drupal/web/sites/default/files/js
+/drupal/web/sites/default/files/php/twig
+/drupal/vendor
+/drupal/web/core
+.env

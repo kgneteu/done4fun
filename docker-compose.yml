@@ -1,0 +1,64 @@
+version: '3.6'
+services:
+  #  app:
+  #    build: .
+  #    ports:
+  #      - "3010:3000"
+  #  api:
+  #    build:
+  #      context: ../done4fun-api/
+  #    env_file:
+  #      - ../done4fun-api/.env
+  #    depends_on:
+  #      - postgres
+  #    ports:
+  #      - "9000:9000"
+  postgres:
+    image: postgres:14
+    volumes:
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+    env_file:
+      - ./docker/postgres/.env
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - done4fun
+  drupal:
+    image: drupal:9.3-php7.4
+    env_file:
+      - ./docker/drupal/.env
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    restart: always
+    networks:
+      - done4fun
+  mysql:
+    image: mysql:5.7
+    env_file:
+      - ./docker/mysql/.env
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+    ports:
+      - "3605:3606"
+    restart: always
+    networks:
+      - done4fun
+#  certbot:
+#    image: certbot/certbot
+#  web:
+#    image: nginx:latest
+#    ports:
+#      - "8000:80"
+#    depends_on:
+#      - app
+#    volumes:
+#      - ./public:/var/www/html/public
+#      - ./site.conf:/etc/nginx/conf.d/default.conf:ro
+
+
+networks:
+  done4fun:
+    driver: bridge

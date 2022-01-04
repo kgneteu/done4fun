@@ -1,0 +1,1 @@
+mysqldump -u root -p drupal>init_db.sql
