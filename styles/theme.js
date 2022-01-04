@@ -4,8 +4,12 @@ import {blue, grey, lightBlue, red, yellow} from '@mui/material/colors';
 // Create a theme instance.
 const theme = createTheme({
     palette: {
-        primary: blue,
-        secondary: yellow,
+        primary: {
+            main: '#01579b',
+        },
+        secondary: {
+            main: '#2e7d32',
+        },
 
         error: {
             main: red.A400,
@@ -21,6 +25,11 @@ const theme = createTheme({
                     backgroundColor: grey['300'],
                 },
             },
+        },
+        MuiIconButton:{
+            defaultProps:{
+                color: "secondary",
+            }
         }
     }
 });

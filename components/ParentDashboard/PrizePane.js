@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useToken} from "../../hooks/useToken";
 import {Loader} from "../UI/Loader";
 import Box from "@mui/material/Box";
-import {Tab, Tabs} from "@mui/material";
+import {Card, CardActions, CardContent, Grid, Tab, Tabs} from "@mui/material";
 import AttractionsIcon from "@mui/icons-material/Attractions";
 import DepartureBoardIcon from "@mui/icons-material/DepartureBoard";
 import HistoryIcon from "@mui/icons-material/History";
@@ -18,7 +18,43 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import {useTranslation} from "next-i18next";
 import {useConfirm} from "material-ui-confirm";
+import Image from "next/image";
+import Typography from "@mui/material/Typography";
+import {grey} from "@mui/material/colors";
+import SVG from "../SVG";
 
+
+function PrizeCard({prize, onPrizeEdit, onPrizeDelete}) {
+    return (
+        <Card sx={{width: "180px"}}>
+            {/*<SvgIcon color={'primary'} width={32} height={32} component={`/images/icons/prizes/${prize.icon}.svg`}/>*/}
+            <img width={32} height={32} src={`/images/icons/prizes/${prize.icon}.svg`}/>
+            <SVG width={32} height={32} src={`assets/icons/prizes/${prize.icon}.svg?url`}/>
+            <CardContent>
+                <Typography variant="body2" color="text.secondary" noWrap>
+                    {prize.name}
+                </Typography>
+            </CardContent>
+
+            <CardActions disableSpacing={true}>
+                <CasinoIcon color={"disabled"}/>{prize.points}
+                <Box sx={{flexGrow:1}}/>
+                <IconButton onClick={onPrizeEdit} color={'primary'}>
+                    <EditIcon/>
+                </IconButton>
+
+                <IconButton onClick={onPrizeDelete} color={'error'}>
+                    <DeleteIcon/>
+                </IconButton>
+            </CardActions>
+        </Card>);
+}
+
+PrizeCard.propTypes = {
+    prize: PropTypes.any,
+    onPrizeEdit: PropTypes.func,
+    onPrizeDelete: PropTypes.func
+};
 
 function AvailablePrizes({user: kid}) {
     const [token, status] = useToken()
@@ -58,22 +94,16 @@ function AvailablePrizes({user: kid}) {
                         onClick={() => handlePrizeAdd()}>
                 <AddIcon/>
             </IconButton>
-            {prizes && prizes.map(prize => (
-                <p key={prize.id}>
-                    {/*<Image width={32} height={32} src={`/images/x.png`}/>*/}
-                    <img width={32} height={32} src={`/images/icons/prizes/${prize.icon}.svg`}/>
-                    {prize.name}-{prize.id}
-                    <CasinoIcon/>{prize.points}
-                    <IconButton color="primary" aria-label="edit" size="medium"
-                                onClick={() => handlePrizeEdit(prize.id)}>
-                        <EditIcon/>
-                    </IconButton>
-                    <IconButton color="primary" aria-label="delete" size="medium"
-                                onClick={() => handlePrizeDelete(prize.id)}>
-                        <DeleteIcon/>
-                    </IconButton>
-                </p>
-            ))}
+            <Box sx={{p: 2, backgroundColor: grey.A200}}>
+                <Grid container spacing={2} justifyContent={"center"}>
+                    {prizes && prizes.map(prize => (
+                        <Grid item key={prize.id}>
+                            <PrizeCard prize={prize} onPrizeEdit={() => handlePrizeEdit(prize.id)}
+                                       onPrizeDelete={() => handlePrizeDelete(prize.id)}/>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
         </>
     )
 }

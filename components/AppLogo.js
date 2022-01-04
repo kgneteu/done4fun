@@ -1,8 +1,9 @@
-import logo from '../assets/images/logo.svg'
+import Logo from '../assets/images/logo.svg'
 import Image from "next/image";
 const AppLogo = (props) => {
     return (
-        <Image src={logo} height={64} width={64} alt={"Done4Fun"}/>
+        // <img src={logo} height={32} width={32} alt={"Done4Fun"}/>
+        <Logo width={64} height={64}/>
     )
 
 };

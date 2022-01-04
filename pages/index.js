@@ -14,7 +14,7 @@ function Trailers({posts = null}) {
             <>
                 {posts.map(post => (
                     <div key={post.id}>
-                        <h1>{post.title}</h1>
+                        <h2>{post.title}</h2>
                         <div dangerouslySetInnerHTML={{__html: post.body.value}}/>
                     </div>
                 ))}
