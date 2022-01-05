@@ -11,6 +11,7 @@ import {Layout} from "../components/Layout";
 import createEmotionCache from "../styles/createEmotionCache";
 import {ConfirmProvider} from "material-ui-confirm";
 import TokenProvider from "../context/token-context";
+import ToastPortal from "../components/ToastPortal";
 
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -52,13 +53,22 @@ function App({Component, emotionCache = clientSideEmotionCache, pageProps, ...re
 
 const AppWithI18n = appWithTranslation(App);
 
+
+function ToastContainerPortal() {
+    return (
+        <ToastContainer/>
+    );
+}
+
 const AppWithAuth = (props) => (
 
     <SessionProvider session={props.pageProps.session}>
         <TokenProvider>
             <AppWithI18n {...props} />
         </TokenProvider>
-        <ToastContainer/>
+        <ToastPortal>
+            <ToastContainer/>
+        </ToastPortal>
     </SessionProvider>
 )
 

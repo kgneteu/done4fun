@@ -4,6 +4,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import theme from "../styles/theme";
 import createEmotionCache from "../styles/createEmotionCache";
 
+
 export default class MyDocument extends Document {
     render() {
         return (
@@ -19,6 +20,7 @@ export default class MyDocument extends Document {
                 <body>
                 <Main/>
                 <NextScript/>
+                <div id="toaster"></div>
                 <style>{`#__next {height: 100%; } body,html {height: 100%;}`}</style>
                 </body>
             </Html>

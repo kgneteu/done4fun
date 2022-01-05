@@ -5,8 +5,6 @@ const SVG = (props) => {
     useEffect(() => {
         const LoadIcon= async () =>{
             const i = await import("./../assets/icons/prizes/1.svg")
-            console.log(i)
-
         }
         LoadIcon()
     }, [])

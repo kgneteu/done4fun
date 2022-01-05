@@ -1,6 +1,6 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import KidsPane from "./KidsPane";
+import KidsPane from "./Kids/KidsPane";
 
 
 const ParentDashboard = () => {

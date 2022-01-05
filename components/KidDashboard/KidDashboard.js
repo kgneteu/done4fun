@@ -1,6 +1,6 @@
 import {useState} from "react";
 import Grid from "@mui/material/Grid";
-import KidsPane from "../ParentDashboard/KidsPane";
+import KidsPane from "../ParentDashboard/Kids/KidsPane";
 import KidPane from "../ParentDashboard/KidPane";
 import * as React from "react";
 

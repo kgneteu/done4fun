@@ -10,7 +10,7 @@ import {useToken} from "../../hooks/useToken";
 import Box from "@mui/material/Box";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import PrizePane from "./PrizePane";
+import PrizePane from "./Prizes/PrizePane";
 import TaskPane from "./TaskPane";
 import {useTranslation} from "next-i18next";
 import {ERROR_MSG, showToast} from "../../utils/toasts";

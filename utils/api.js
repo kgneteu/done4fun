@@ -15,7 +15,6 @@ async function apiRefreshToken(token) {
 
 async function apiCall(url, method = "GET", token = null, data = null, autoRepeat = true) {
     //We don't catch exceptions - caller should use catch
-
     const res = await fetch(`http://localhost:9000/api${url}`, {
         method: method,
         credentials: 'include',
@@ -73,18 +72,22 @@ export async function apiGetUser(token, id) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-export async function apiGetAvailablePrizes(token, id) {
-    return await apiCall(`/auth/user/${id}/prizes/available`, 'GET', token)
+export async function apiGetAvailablePrizes(token, prizeId) {
+    return await apiCall(`/auth/user/${prizeId}/prizes/available`, 'GET', token)
 }
 
-export async function apiDeletePrize(token, id) {
-    return await apiCall(`/auth/prize/${id}`, 'DELETE', token)
+export async function apiDeletePrize(token, prizeId) {
+    return await apiCall(`/auth/prize/${prizeId}`, 'DELETE', token)
 }
 
-export async function apiGetPrize(token, id) {
-    return await apiCall(`/auth/user/${id}/prizes/available`, 'GET', token)
+export async function apiGetPrize(token, prizeId) {
+    return await apiCall(`/auth/prize/${prizeId}`, 'GET', token)
 }
 
-// export async function apiGetPrize(token, id) {
-//     return await apiCall(`/auth/user/${id}/prizes/available`, 'GET', token)
-// }
+export async function apiUpdatePrize(token, prizeId, prize) {
+    return await apiCall(`/auth/prize/${prizeId}`, 'PATCH', token, prize)
+}
+
+export async function apiCreatePrize(token, userId, prize) {
+    return await apiCall(`/auth/user/${userId}/prize/create`, 'POST', token, prize)
+}
