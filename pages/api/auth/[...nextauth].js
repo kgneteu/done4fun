@@ -35,7 +35,7 @@ async function RefreshToken(refreshToken) {
             refresh_time: Date.now() + process.env.REFRESH_TOKEN_MIN * 1000 * 60,
         }
     } catch (error) {
-        console.log(error)
+        console.error(error.message)
         return {
             token: null,
             error: error,

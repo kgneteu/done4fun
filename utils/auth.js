@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 //     if (!token){
 //         // const sessionCookie = Cookies.get('next-auth.session-token')
 //         // if (sessionCookie){
-//         //     console.log("aaa",sessionCookie)
+
 //         // }
 //         const session = await getSession()
 //         token = session?.user?.access_token;

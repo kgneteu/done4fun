@@ -3,7 +3,6 @@ import {getSession, useSession} from "next-auth/react";
 import {TokenContext} from "../context/token-context";
 export function useToken() {
     const {data: session, status} = useSession();
-    if (status ==="authenticated") status = "authorized"
     return [session?.user?.access_token, status, session?.user]
     // const sessionInfo = useContext(TokenContext)
     // useEffect(() => {
@@ -12,9 +11,9 @@ export function useToken() {
     //             .then(session => {
     //                 const t = session?.user?.access_token;
     //                 if (t) {
-    //                     sessionInfo.setData(t,"authorized",session.user)
+    //                     sessionInfo.setData(t,"authenticated",session.user)
     //                 } else {
-    //                     sessionInfo.setStatus("unauthorized")
+    //                     sessionInfo.setStatus("unauthenticated")
     //                 }
     //             }).catch(e => {
     //             sessionInfo.setStatus("error")

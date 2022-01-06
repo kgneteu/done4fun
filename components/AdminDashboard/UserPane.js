@@ -21,7 +21,7 @@ export function UserPane(props) {
         , [pageNo, token])
 
     let userTable = null;
-    if (status !== "authorized") return <Loader/>
+    if (status !== "authenticated") return <Loader/>
 
     function handlePageChange(event, value) {
         setPageNo(value)

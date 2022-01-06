@@ -2,7 +2,6 @@ import {useToken} from "../../../hooks/useToken";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {useTranslation} from "next-i18next";
-import {useConfirm} from "material-ui-confirm";
 import {apiCreatePrize, apiDeletePrize, apiGetAvailablePrizes, apiGetPrize, apiUpdatePrize} from "../../../utils/api";
 import {ERROR_MSG, showToast, SUCCESS_MSG} from "../../../utils/toasts";
 import IconButton from "@mui/material/IconButton";
@@ -11,17 +10,17 @@ import Box from "@mui/material/Box";
 import {grey} from "@mui/material/colors";
 import {Grid} from "@mui/material";
 import {PrizeCard} from "./PrizeCard";
-import ResponsiveDialog from "../../ResponsiveDialog";
+import ResponsiveDialog from "../../UI/ResponsiveDialog";
 import {PrizeEditor} from "./PrizeEditor";
 import Typography from "@mui/material/Typography";
 import {Loader} from "../../UI/Loader";
+import {useDeleteConfirm} from "../../../hooks/useDeleteConfirm";
 
 export const AvailablePrizes = ({user: kid}) => {
-    console.log(kid)
         const [token, status] = useToken()
         const [prizes, setPrizes] = useState(null)
         const {t} = useTranslation();
-        const confirm = useConfirm();
+        const confirm = useDeleteConfirm();
         const [dialogOpen, setDialogOpen] = useState(false)
         const [dialog, setDialog] = useState(null);
         const [dialogTitle, setDialogTitle] = useState(null);
@@ -50,17 +49,16 @@ export const AvailablePrizes = ({user: kid}) => {
         }
 
         const handlePrizeDelete = id => {
-            confirm({description: t('This action is permanent and unrecoverable!')})
-                .then(() => {
-                        apiDeletePrize(token, id)
-                            .then(() => {
-                                    showToast(SUCCESS_MSG, t("Prize has been deleted!"))
-                                    reload();
-                                }
-                            )
-                            .catch(err => showToast(ERROR_MSG, err.message))
-                    }
-                )
+            confirm().then(() => {
+                    apiDeletePrize(token, id)
+                        .then(() => {
+                                showToast(SUCCESS_MSG, t("Prize has been deleted!"))
+                                reload();
+                            }
+                        )
+                        .catch(err => showToast(ERROR_MSG, err.message))
+                }
+            )
         };
 
         const handlePrizeUpdate = (id, values) => {
@@ -101,7 +99,7 @@ export const AvailablePrizes = ({user: kid}) => {
 
         const handlePrizeAdd = () => {
             setDialogTitle(t("New Prize"))
-            setDialog(<PrizeEditor onClose={handleDialogClose} onSubmit={(values)=>handlePrizeCreate(values)}/>)
+            setDialog(<PrizeEditor onClose={handleDialogClose} onSubmit={(values) => handlePrizeCreate(values)}/>)
             setDialogOpen(true)
         };
 
@@ -116,7 +114,8 @@ export const AvailablePrizes = ({user: kid}) => {
                     <Grid container spacing={2} justifyContent={"center"}>
                         {prizes && prizes.map(prize => (
                             <Grid item key={prize.id}>
-                                <PrizeCard prize={prize} onPrizeEdit={() => handlePrizeEdit(prize.id)}
+                                <PrizeCard prize={prize}
+                                           onPrizeEdit={() => handlePrizeEdit(prize.id)}
                                            onPrizeDelete={() => handlePrizeDelete(prize.id)}/>
                             </Grid>
                         ))}

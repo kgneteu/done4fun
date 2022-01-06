@@ -16,7 +16,7 @@ export const UserTable = ({users, pager}) => {
     const confirm = useConfirm();
     const {t} = useTranslation()
 
-    function handleUserDelete(id) {
+    function handleUserDelete(token, id) {
         confirm({description: t('This action is permanent!')})
             .then(() => {
                 apiDeleteUser(id)

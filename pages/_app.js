@@ -11,7 +11,7 @@ import {Layout} from "../components/Layout";
 import createEmotionCache from "../styles/createEmotionCache";
 import {ConfirmProvider} from "material-ui-confirm";
 import TokenProvider from "../context/token-context";
-import ToastPortal from "../components/ToastPortal";
+import ToastPortal from "../components/UI/ToastPortal";
 
 
 // Client-side cache, shared for the whole session of the user in the browser.

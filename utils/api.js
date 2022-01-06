@@ -32,7 +32,6 @@ async function apiCall(url, method = "GET", token = null, data = null, autoRepea
             if (msg?.message === "expired") {
                 const newToken = await apiRefreshToken(token)
                 if (newToken && autoRepeat) {
-                    console.log('autorepeat', newToken);
                     return apiCall(url, method, newToken, data, false);
                 }
             }
@@ -42,7 +41,7 @@ async function apiCall(url, method = "GET", token = null, data = null, autoRepea
     }
 }
 
-export async function apiDeleteUser(id, token) {
+export async function apiDeleteUser(token, id) {
     return await apiCall(`/auth/user/${id}`, "DELETE", token)
 }
 
@@ -68,6 +67,26 @@ export async function apiSearchUser(token, limit = 10, filter = "", role = "", p
 
 export async function apiGetUser(token, id) {
     return await apiCall(`/auth/user/${id}`, 'GET', token)
+}
+
+
+export async function apiUpdateUser(token, id, user) {
+    const {upload, ...updatedUser} = user;
+    if (upload) {
+        const ext = upload.name.split('.').pop();
+        const filename = id + '.' + ext;
+        const body = new FormData();
+        body.append("file", upload, filename);
+        body.append('user', id)
+        body.append('type', 'avatar')
+        const response = await fetch("/api/file", {
+            method: "POST",
+            body
+        });
+        if (!response.ok) throw new Error("File upload error")
+        updatedUser.picture = filename;
+    }
+    //return await apiCall(`/auth/user/${id}`, 'PATCH', token, updatedUser)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -12,7 +12,7 @@ const DashboardPage = () => {
     const [_, status, user] = useToken()
  //debugger
     if (status === "loading") return <Loader/>
-    if (status !== "authorized") {
+    if (status !== "authenticated") {
          signIn()
          return <Loader/>
     }

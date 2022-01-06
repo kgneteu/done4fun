@@ -28,7 +28,7 @@ Trailers.propTypes = {posts: PropTypes.array};
 export default function Home(props) {
     const {data: session, status} = useSession()
     const loading = status === 'loading'
-    //console.log(session,status)
+
     const posts = props.posts;
     const {t} = useTranslation();
     return (
@@ -65,7 +65,7 @@ export async function getStaticProps(context) {
             }
         )
     } catch (e) {
-        console.log(e.message)
+
     }
 
     return {

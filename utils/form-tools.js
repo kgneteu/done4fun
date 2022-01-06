@@ -31,3 +31,15 @@ export function stringToColor(string) {
 
     return color;
 }
+
+
+export function stringAvatar(name, size = '32px') {
+    return {
+        sx: {
+            backgroundColor: stringToColor(name),
+            width: size,
+            height: size,
+        },
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    };
+}

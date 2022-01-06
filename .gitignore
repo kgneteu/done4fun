@@ -36,3 +36,4 @@ yarn-error.log*
 
 .env.development
 .env.production
+/private/images/avatar/

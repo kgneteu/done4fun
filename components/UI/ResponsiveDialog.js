@@ -16,7 +16,8 @@ export default function ResponsiveDialog({open, onClose, title = null, children}
                 onClose={onClose}
                 aria-labelledby="dialog-title"
             >
-                {title && <DialogTitle id="dialog-title">
+                {title &&
+                <DialogTitle id="dialog-title">
                     {title}
                 </DialogTitle>}
                 {children}

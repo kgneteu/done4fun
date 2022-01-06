@@ -3,27 +3,17 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import Link from "../../UI/Link";
-import {stringToColor} from "../../../utils/form-tools";
+import {stringAvatar, stringToColor} from "../../../utils/form-tools";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
+
+
+
 const KidCard = ({user, onKidEdit, onKidDelete}) => {
-
-
-    function stringAvatar(name, size = '32px') {
-        return {
-            sx: {
-                backgroundColor: stringToColor(name),
-                width: size,
-                height: size,
-            },
-            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-        };
-    }
-
     return (
         <Card sx={{maxWidth: 345, minWidth: 160}}>
             <CardActionArea component={Link} href={`/dashboard/kid/${user.id}`}>

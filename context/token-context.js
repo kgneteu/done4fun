@@ -25,7 +25,7 @@ export default function TokenProvider({children}) {
         setContext({token, status: newStatus, user})
     };
     const logOut = () => {
-        setContext({token:null, status:"unauthorized", user: null})
+        setContext({token:null, status:"unauthenticated", user: null})
     };
 
     const context = {
