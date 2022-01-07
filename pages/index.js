@@ -4,7 +4,7 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useSession} from "next-auth/react";
 import {getResourceCollectionFromContext} from "next-drupal";
 import * as PropTypes from "prop-types";
-import {FrontVideo} from "./FrontVideo";
+import {FrontVideo} from "../components/FrontVideo";
 
 function Trailers({posts = null}) {
 
