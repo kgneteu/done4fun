@@ -15,7 +15,7 @@ async function apiRefreshToken(token) {
 
 async function apiCall(url, method = "GET", token = null, data = null, autoRepeat = true) {
     //We don't catch exceptions - caller should use catch
-    const res = await fetch(`http://localhost:9000/api${url}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api${url}`, {
         method: method,
         credentials: 'include',
         headers: {
