@@ -189,7 +189,7 @@ const UserEditor = ({user, onClose, onSubmit}) => {
                     <FormLabel component="legend">Avatar</FormLabel>
                     <Grid container alignItems={"center"}>
                         <Avatar {...stringAvatar(
-                            formik.values['first_name'] + ' ' + formik.values['last_name'], '80px')}/>
+                            formik.values['first_name'] + ' ' + formik.values['last_name'], 80)}/>
                         <FileUpload label={t("Change")}
                                     name={"upload"}
                                     onChange={(e)=>formik.setFieldValue("upload", e.target.files[0])}

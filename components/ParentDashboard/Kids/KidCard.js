@@ -3,15 +3,39 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import Link from "../../UI/Link";
-import {stringAvatar, stringToColor} from "../../../utils/form-tools";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Image from 'next/image'
+import {stringAvatar} from "../../../utils/form-tools";
 
+const UserAvatar = ({user, size}) => {
+        //todo better avatar in cicrle
+    if (user.picture) {
+        return (
+            //<Avatar sx={{width: size, height: size}} src={`/api/file/private/images/avatar/${user.picture}`} />
+            // <Box sx={{
+            //     width: size,
+            //     height: size,
+            //     position: "relative",
+            //     borderRadius: "50%",
+            //     overflow: "hidden",
+            //     border: "1px solid #cccccc"
+            // }}>
+            <Avatar  sx={{width: size, height: size}}>
+                <Image src={`/api/file/private/images/avatar/${user.picture}`} height={size} width={size}
+                       layout={'fill'} objectFit={'cover'}/>
+            </Avatar>
 
+        )
+    } else {
+        return <Avatar {...stringAvatar(user.first_name + ' ' + user.last_name, size)}/>
+    }
+};
 
+UserAvatar.propTypes = {};
 
 const KidCard = ({user, onKidEdit, onKidDelete}) => {
     return (
@@ -19,7 +43,8 @@ const KidCard = ({user, onKidEdit, onKidDelete}) => {
             <CardActionArea component={Link} href={`/dashboard/kid/${user.id}`}>
                 <CardContent>
                     <Grid container direction={"column"} alignItems={"center"}>
-                        <Avatar {...stringAvatar(user.first_name + ' ' + user.last_name, '80px')}/>
+                        <UserAvatar user={user} size={80}/>
+
                         <Typography gutterBottom variant="h5" component="div">
                             {user.first_name}
                         </Typography>
@@ -27,7 +52,8 @@ const KidCard = ({user, onKidEdit, onKidDelete}) => {
                 </CardContent>
             </CardActionArea>
             <CardActions disableSpacing={true}>
-                <IconButton onClick={onKidEdit} color={'primary'} component={Link} href={`/dashboard/kid/${user.id}`}>
+                <IconButton onClick={onKidEdit} color={'primary'} component={Link}
+                            href={`/dashboard/kid/${user.id}`}>
 
                     <MoreHorizIcon/>
                 </IconButton>

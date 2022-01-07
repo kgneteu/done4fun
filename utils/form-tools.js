@@ -33,12 +33,12 @@ export function stringToColor(string) {
 }
 
 
-export function stringAvatar(name, size = '32px') {
+export function stringAvatar(name, size = 32) {
     return {
         sx: {
             backgroundColor: stringToColor(name),
-            width: size,
-            height: size,
+            width: size+'px',
+            height: size+'px',
         },
         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
     };

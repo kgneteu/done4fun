@@ -86,7 +86,12 @@ export async function apiUpdateUser(token, id, user) {
         if (!response.ok) throw new Error("File upload error")
         updatedUser.picture = filename;
     }
-    //return await apiCall(`/auth/user/${id}`, 'PATCH', token, updatedUser)
+    if (updatedUser.password.length < 1) {
+        delete updatedUser.password;
+    }
+
+    console.log(updatedUser)
+    return await apiCall(`/auth/user/${id}`, 'PATCH', token, updatedUser)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,4 +114,26 @@ export async function apiUpdatePrize(token, prizeId, prize) {
 
 export async function apiCreatePrize(token, userId, prize) {
     return await apiCall(`/auth/user/${userId}/prize/create`, 'POST', token, prize)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function apiGetAvailableTasks(token, taskId) {
+    return await apiCall(`/auth/user/${taskId}/tasks/available`, 'GET', token)
+}
+
+export async function apiDeleteTask(token, taskId) {
+    return await apiCall(`/auth/task/${taskId}`, 'DELETE', token)
+}
+
+export async function apiGetTask(token, taskId) {
+    return await apiCall(`/auth/task/${taskId}`, 'GET', token)
+}
+
+export async function apiUpdateTask(token, taskId, task) {
+    return await apiCall(`/auth/task/${taskId}`, 'PATCH', token, task)
+}
+
+export async function apiCreateTask(token, userId, task) {
+    return await apiCall(`/auth/user/${userId}/task/create`, 'POST', token, task)
 }

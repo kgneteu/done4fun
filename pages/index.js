@@ -4,6 +4,7 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useSession} from "next-auth/react";
 import {getResourceCollectionFromContext} from "next-drupal";
 import * as PropTypes from "prop-types";
+import {FrontVideo} from "./FrontVideo";
 
 function Trailers({posts = null}) {
 
@@ -45,6 +46,7 @@ export default function Home(props) {
                 <li><Link href={"/contact"}>{t('Contact')}</Link></li>
                 <li><Link href={"/dashboard"}>{t('Dashboard')}</Link></li>
             </ul>
+            <FrontVideo/>
             <Trailers posts={posts}/>
         </>
     )
@@ -52,6 +54,9 @@ export default function Home(props) {
 
 export async function getStaticProps(context) {
     let posts = null
+    //context.params.slug=null;
+    //const type = await getResourceTypeFromContext(context)
+    // console.log(type)
     try {
         posts = await getResourceCollectionFromContext(
             'node--article',

@@ -14,7 +14,7 @@ import {useDeleteConfirm} from "../../../hooks/useDeleteConfirm";
 
 
 const KidsPane = () => {
-    const [token, status] = useToken()
+    const [token, status, currentUser] = useToken()
     const [pageNo, setPageNo] = useState(1)
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -63,6 +63,9 @@ const KidsPane = () => {
 
 
     const handleKidUpdate = (id, values) => {
+        if (currentUser.role !=="admin"){
+            delete values.role;
+        }
         apiUpdateUser(token, id, {...values})
             .then(() => {
                     showToast(SUCCESS_MSG, t("User has been saved!"))
