@@ -14,8 +14,8 @@ services:
       - ../done4fun-api/.env
     depends_on:
       - postgres
-#    ports:
-#      - "9000:9000"
+    ports:
+      - "9000:9000"
     restart: always
     networks:
       - done4fun
