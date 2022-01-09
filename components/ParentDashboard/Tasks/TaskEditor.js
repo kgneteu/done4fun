@@ -1,46 +1,12 @@
 import {useTranslation} from "next-i18next";
 import {useFormik} from "formik";
 import * as yup from "yup";
-import {Container, FormGroup, MenuItem, TextField, ToggleButton} from "@mui/material";
+import {Container, MenuItem, TextField} from "@mui/material";
 import {formFieldProps} from "../../../utils/form-tools";
 import {IconPicker} from "../../UI/IconPicker";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-
-function getWeekDays(locale) {
-    const baseDate = new Date(Date.UTC(2017, 0, 2)); // just a Monday
-    const weekDays = [];
-    for (let i = 0; i < 7; i++) {
-        weekDays.push(baseDate.toLocaleDateString(locale, {weekday: 'narrow'}));
-        baseDate.setDate(baseDate.getDate() + 1);
-    }
-    return weekDays;
-}
-
-function DaySelect({mode = 0, name, value, onChange}) {
-    const updateValue = item => {
-        const newValue = value ^ (2 ** item);
-        if (onChange) onChange(newValue)
-    };
-
-    return (
-        <FormGroup row>
-            {[...Array(mode == 0 ? 7 : 31).keys()].map(item => (
-                <ToggleButton
-                    key={item + 1}
-                    value={item + 1}
-                    selected={value & (2 ** item)}
-                    onChange={() => {
-                        updateValue(item);
-                    }}
-                    sx={{width: "3rem"}}
-                >
-                    {mode == 0 ? getWeekDays()[item] : item + 1}
-                </ToggleButton>
-            ))}
-        </FormGroup>
-    )
-}
+import {DaySelect} from "./DaySelect";
 
 
 export const TaskEditor = ({task, onClose, onSubmit}) => {
