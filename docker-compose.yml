@@ -25,8 +25,8 @@ services:
       - ./docker/postgres/init:/docker-entrypoint-initdb.d
     env_file:
       - ./docker/postgres/.env
-#    ports:
-#      - "5433:5432"
+    ports:
+      - "5433:5432"
     restart: always
     networks:
       - done4fun

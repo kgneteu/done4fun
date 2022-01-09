@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import {grey} from "@mui/material/colors";
-import {Grid} from "@mui/material";
+import {Fab, Grid} from "@mui/material";
 import ResponsiveDialog from "../../UI/ResponsiveDialog";
 import Typography from "@mui/material/Typography";
 import {Loader} from "../../UI/Loader";
@@ -21,16 +21,16 @@ export const AvailableTasks = ({user: kid}) => {
         const [tasks, setTasks] = useState(null)
         const {t} = useTranslation();
         const confirm = useDeleteConfirm();
-        const [dialogOpen, setDialogOpen] = useState(false)
+        //const [dialogOpen, setDialogOpen] = useState(false)
         const [dialog, setDialog] = useState(null);
-        const [dialogTitle, setDialogTitle] = useState(null);
+        //const [dialogTitle, setDialogTitle] = useState(null);
         const [loading, setLoading] = useState(true)
 
         useEffect(() => {
             if (token) reload()
         }, [token])
 
-    console.log(tasks)
+
         const reload = () => {
             if (token) apiGetAvailableTasks(token, kid.id)
                 .then(data => {
@@ -44,9 +44,7 @@ export const AvailableTasks = ({user: kid}) => {
         if (loading || !token) return <Loader/>
 
         const handleDialogClose = () => {
-            setDialogOpen(false)
             setDialog(null)
-            setDialogTitle(null)
         }
 
         const handleTaskDelete = id => {
@@ -62,36 +60,41 @@ export const AvailableTasks = ({user: kid}) => {
             )
         };
 
-        const handleTaskUpdate = (id, values) => {
-            apiUpdateTask(token, id, {...values})
-                .then(() => {
-                        showToast(SUCCESS_MSG, t("Task has been saved!"))
-                        reload();
-                        handleDialogClose()
-                    }
-                )
-                .catch(err => showToast(ERROR_MSG, err.message))
+
+        const handleTaskUpdate = async (id, values) => {
+            try {
+
+                await apiUpdateTask(token, id, {...values})
+                showToast(SUCCESS_MSG, t("Task has been saved!"))
+                reload();
+                handleDialogClose()
+            } catch (e) {
+                showToast(ERROR_MSG, e.message)
+            }
         }
 
-        const handleTaskCreate = values => {
-            apiCreateTask(token, kid.id, {...values})
-                .then(() => {
-                        showToast(SUCCESS_MSG, t("Task has been created!"))
-                        reload();
-                        handleDialogClose()
-                    }
-                )
-                .catch(err => showToast(ERROR_MSG, err.message))
+        const handleTaskCreate = async (values) => {
+            try {
+                await apiCreateTask(token, kid.id, {...values})
+                showToast(SUCCESS_MSG, t("Task has been created!"))
+                reload();
+                handleDialogClose()
+            } catch (e) {
+                showToast(ERROR_MSG, e.message)
+            }
         };
 
         const handleTaskEdit = id => {
             apiGetTask(token, id)
                 .then((task) => {
                     if (task?.task && task.task.id === id) {
-                        setDialogTitle(t("Edit Task"))
-                        setDialog(<TaskEditor task={task.task} onClose={handleDialogClose}
-                                               onSubmit={(values) => handleTaskUpdate(id, values)}/>)
-                        setDialogOpen(true)
+                        //setDialogTitle(t("Edit Task"))
+                        setDialog({
+                            component: <TaskEditor task={task.task} onClose={handleDialogClose}
+                                                   onSubmit={(values) => handleTaskUpdate(id, values)}/>,
+                            title: t("Edit Task"),
+                        })
+                        //setDialogOpen(true)
                     }
                 })
                 .catch(err => showToast(ERROR_MSG, err.message))
@@ -99,9 +102,10 @@ export const AvailableTasks = ({user: kid}) => {
 
 
         const handleTaskAdd = () => {
-            setDialogTitle(t("New Task"))
-            setDialog(<TaskEditor onClose={handleDialogClose} onSubmit={(values) => handleTaskCreate(values)}/>)
-            setDialogOpen(true)
+            setDialog({
+                component: <TaskEditor onClose={handleDialogClose} onSubmit={(values) => handleTaskCreate(values)}/>,
+                title: t("New Task"),
+            })
         };
 
         return (
@@ -116,15 +120,18 @@ export const AvailableTasks = ({user: kid}) => {
                         {tasks && tasks.map(task => (
                             <Grid item key={task.id}>
                                 <TaskCard task={task}
-                                           onTaskEdit={() => handleTaskEdit(task.id)}
-                                           onTaskDelete={() => handleTaskDelete(task.id)}/>
+                                          onTaskEdit={() => handleTaskEdit(task.id)}
+                                          onTaskDelete={() => handleTaskDelete(task.id)}/>
                             </Grid>
                         ))}
                     </Grid>
                 </Box>
-                <ResponsiveDialog open={dialogOpen} title={dialogTitle} onClose={handleDialogClose}>
-                    {dialog}
-                </ResponsiveDialog>
+                <Fab color={"primary"} sx={{position: "fixed",bottom:"2rem", right:"2rem"}} onClick={handleTaskAdd}>
+                    <AddIcon/>
+                </Fab>
+                {dialog && <ResponsiveDialog open={true} title={dialog.title} onClose={handleDialogClose}>
+                    {dialog.component}
+                </ResponsiveDialog>}
             </>
         )
     }

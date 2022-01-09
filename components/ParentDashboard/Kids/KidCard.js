@@ -31,7 +31,7 @@ const UserAvatar = ({user, size}) => {
 
         )
     } else {
-        return <Avatar {...stringAvatar(user.first_name + ' ' + user.last_name, size)}/>
+        return <Avatar {...stringAvatar(user.first_name, user.last_name, size)}/>
     }
 };
 

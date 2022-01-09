@@ -27,12 +27,11 @@ export const PrizeEditor = ({prize, onClose, onSubmit}) => {
         onSubmit: values => handleSubmit(values),
     })
 
-    const handleSubmit = (values) => {
-        if (onSubmit) onSubmit(values)
+    const handleSubmit = async (values) => {
+        if (onSubmit) await onSubmit(values)
+        formik.setSubmitting(false)
     }
-    const handleClose = () => {
-        if (onClose) onClose()
-    };
+
 
     return (
         <Container maxWidth={"sm"}>
@@ -63,8 +62,8 @@ export const PrizeEditor = ({prize, onClose, onSubmit}) => {
                             />}/>
                 </FormGroup>
                 <DialogActions>
-                    <Button variant={"contained"} onClick={handleClose}>{t("Cancel")}</Button>
-                    <Button variant={"contained"} type={'submit'}>{t("Save")}</Button>
+                    <Button variant={"contained"} onClick={onClose}>{t("Cancel")}</Button>
+                    <Button variant={"contained"} type={'submit'} disabled={formik.isSubmitting}>{t("Save")}</Button>
                 </DialogActions>
             </form>
         </Container>

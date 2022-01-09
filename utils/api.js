@@ -4,7 +4,6 @@ async function apiRefreshToken(token) {
 
     const session = await getSession()
     const newToken = session?.user?.access_token;
-    //if (newToken===token) alert('same'+'---'+token); else alert('diff'+'---'+token+'---'+newToken)
     if (newToken !== token) {
         return newToken;
     } else {
@@ -13,8 +12,8 @@ async function apiRefreshToken(token) {
 
 }
 
+//We don't catch exceptions here - caller should catch them
 async function apiCall(url, method = "GET", token = null, data = null, autoRepeat = true) {
-    //We don't catch exceptions - caller should use catch
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api${url}`, {
         method: method,
         credentials: 'include',
@@ -37,9 +36,10 @@ async function apiCall(url, method = "GET", token = null, data = null, autoRepea
             }
         }
         throw new Error(res.statusText)
-        //return res.statusText
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 export async function apiDeleteUser(token, id) {
     return await apiCall(`/auth/user/${id}`, "DELETE", token)
@@ -69,6 +69,12 @@ export async function apiGetUser(token, id) {
     return await apiCall(`/auth/user/${id}`, 'GET', token)
 }
 
+export async function apiCreateUser(token, user) {
+    const {upload, ...updatedUser} = user;
+    const res = await apiCall(`/auth/user/create`, 'POST', token, updatedUser)
+    if (upload) await apiUpdateUser(token, res.id, {upload})
+    return res
+}
 
 export async function apiUpdateUser(token, id, user) {
     const {upload, ...updatedUser} = user;
@@ -86,11 +92,10 @@ export async function apiUpdateUser(token, id, user) {
         if (!response.ok) throw new Error("File upload error")
         updatedUser.picture = filename;
     }
-    if (updatedUser.password.length < 1) {
+    if (updatedUser.password && updatedUser.password.length < 1) {
         delete updatedUser.password;
     }
 
-    console.log(updatedUser)
     return await apiCall(`/auth/user/${id}`, 'PATCH', token, updatedUser)
 }
 

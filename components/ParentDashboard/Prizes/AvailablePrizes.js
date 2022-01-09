@@ -15,15 +15,14 @@ import {PrizeEditor} from "./PrizeEditor";
 import Typography from "@mui/material/Typography";
 import {Loader} from "../../UI/Loader";
 import {useDeleteConfirm} from "../../../hooks/useDeleteConfirm";
+import {sleep} from "../../../utils/form-tools";
 
 export const AvailablePrizes = ({user: kid}) => {
         const [token, status] = useToken()
         const [prizes, setPrizes] = useState(null)
         const {t} = useTranslation();
         const confirm = useDeleteConfirm();
-        const [dialogOpen, setDialogOpen] = useState(false)
         const [dialog, setDialog] = useState(null);
-        const [dialogTitle, setDialogTitle] = useState(null);
         const [loading, setLoading] = useState(true)
         useEffect(() => {
             if (token) reload()
@@ -43,9 +42,7 @@ export const AvailablePrizes = ({user: kid}) => {
         if (loading || !token) return <Loader/>
 
         const handleDialogClose = () => {
-            setDialogOpen(false)
             setDialog(null)
-            setDialogTitle(null)
         }
 
         const handlePrizeDelete = id => {
@@ -61,36 +58,37 @@ export const AvailablePrizes = ({user: kid}) => {
             )
         };
 
-        const handlePrizeUpdate = (id, values) => {
-            apiUpdatePrize(token, id, {...values})
-                .then(() => {
-                        showToast(SUCCESS_MSG, t("Prize has been saved!"))
-                        reload();
-                        handleDialogClose()
-                    }
-                )
-                .catch(err => showToast(ERROR_MSG, err.message))
+        const handlePrizeUpdate = async (id, values) => {
+            try {
+                await apiUpdatePrize(token, id, {...values})
+                showToast(SUCCESS_MSG, t("Prize has been saved!"))
+                reload();
+                handleDialogClose()
+            } catch (e) {
+                showToast(ERROR_MSG, e.message)
+            }
         }
 
-        const handlePrizeCreate = values => {
-            apiCreatePrize(token, kid.id, {...values})
-                .then(() => {
-                        showToast(SUCCESS_MSG, t("Prize has been created!"))
-                        reload();
-                        handleDialogClose()
-                    }
-                )
-                .catch(err => showToast(ERROR_MSG, err.message))
+        const handlePrizeCreate = async (values) => {
+            try {
+                await apiCreatePrize(token, kid.id, {...values})
+                showToast(SUCCESS_MSG, t("Prize has been created!"))
+                reload();
+                handleDialogClose()
+            } catch (e) {
+                showToast(ERROR_MSG, e.message)
+            }
         };
 
         const handlePrizeEdit = id => {
             apiGetPrize(token, id)
                 .then((prize) => {
                     if (prize?.prize && prize.prize.id === id) {
-                        setDialogTitle(t("Edit Prize"))
-                        setDialog(<PrizeEditor prize={prize.prize} onClose={handleDialogClose}
-                                               onSubmit={(values) => handlePrizeUpdate(id, values)}/>)
-                        setDialogOpen(true)
+                        setDialog({
+                            component: <PrizeEditor prize={prize.prize} onClose={handleDialogClose}
+                                                    onSubmit={(values) => handlePrizeUpdate(id, values)}/>,
+                            title: t("Edit Prize")
+                        })
                     }
                 })
                 .catch(err => showToast(ERROR_MSG, err.message))
@@ -98,9 +96,11 @@ export const AvailablePrizes = ({user: kid}) => {
 
 
         const handlePrizeAdd = () => {
-            setDialogTitle(t("New Prize"))
-            setDialog(<PrizeEditor onClose={handleDialogClose} onSubmit={(values) => handlePrizeCreate(values)}/>)
-            setDialogOpen(true)
+            setDialog({
+                component: <PrizeEditor onClose={handleDialogClose} onSubmit={(values) => handlePrizeCreate(values)}/>,
+                title: t("New Prize")
+            })
+
         };
 
         return (
@@ -121,9 +121,9 @@ export const AvailablePrizes = ({user: kid}) => {
                         ))}
                     </Grid>
                 </Box>
-                <ResponsiveDialog open={dialogOpen} title={dialogTitle} onClose={handleDialogClose}>
-                    {dialog}
-                </ResponsiveDialog>
+                {dialog && <ResponsiveDialog open={true} title={dialog.title} onClose={handleDialogClose}>
+                    {dialog.component}
+                </ResponsiveDialog>}
             </>
         )
     }

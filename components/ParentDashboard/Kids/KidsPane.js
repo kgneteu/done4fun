@@ -1,7 +1,7 @@
 import {useToken} from "../../../hooks/useToken";
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {apiDeleteUser, apiGetSubUserList, apiGetUser, apiUpdatePrize, apiUpdateUser} from "../../../utils/api";
+import {apiCreateUser, apiDeleteUser, apiGetSubUserList, apiGetUser, apiUpdateUser} from "../../../utils/api";
 import {ERROR_MSG, showToast, SUCCESS_MSG} from "../../../utils/toasts";
 import {Loader} from "../../UI/Loader";
 import Grid from "@mui/material/Grid";
@@ -9,8 +9,10 @@ import KidCard from "./KidCard";
 import {Pager} from "../../UI/Pager";
 import {useTranslation} from "next-i18next";
 import ResponsiveDialog from "../../UI/ResponsiveDialog";
-import UserEditor from "../../UserEditor";
+import UserEditor from "../../Shared/UserEditor";
 import {useDeleteConfirm} from "../../../hooks/useDeleteConfirm";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import {Fab} from "@mui/material";
 
 
 const KidsPane = () => {
@@ -20,17 +22,11 @@ const KidsPane = () => {
     const [loading, setLoading] = useState(true)
     const {t} = useTranslation();
     const confirm = useDeleteConfirm();
-    const [dialogOpen, setDialogOpen] = useState(false)
+    // const [dialogOpen, setDialogOpen] = useState(false)
     const [dialog, setDialog] = useState(null);
-    const [dialogTitle, setDialogTitle] = useState(null);
+    // const [dialogTitle, setDialogTitle] = useState(null);
 
-    useEffect(() => {
-
-        reload()
-
-    }, [pageNo, token])
-
-    function reload() {
+    const reload = () => {
         setLoading(true)
         if (token)
             apiGetSubUserList(pageNo, 16, token)
@@ -39,7 +35,12 @@ const KidsPane = () => {
                     setLoading(false)
                 })
                 .catch(err => showToast(ERROR_MSG, err.message))
-    }
+    };
+
+    useEffect(() => {
+        reload()
+    }, [pageNo, token])
+
 
     if (!token) return <Loader/>
 
@@ -50,23 +51,21 @@ const KidsPane = () => {
 
     const handleKidDelete = id => {
         confirm().then(() => {
-                    apiDeleteUser(token, id)
-                        .then(() => {
-                                showToast(SUCCESS_MSG, t("Kid has been deleted!"))
-                                reload();
-                            }
-                        )
-                        .catch(err => showToast(ERROR_MSG, err.message))
-                }
-            )
+                apiDeleteUser(token, id)
+                    .then(() => {
+                            showToast(SUCCESS_MSG, t("Kid has been deleted!"))
+                            reload();
+                        }
+                    )
+                    .catch(err => showToast(ERROR_MSG, err.message))
+            }
+        )
     };
 
 
-    const handleKidUpdate = (id, values) => {
-        if (currentUser.role !=="admin"){
-            delete values.role;
-        }
-        apiUpdateUser(token, id, {...values})
+    const handleKidUpdate = async (id, values) => {
+        delete values.role;
+        await apiUpdateUser(token, id, {...values})
             .then(() => {
                     showToast(SUCCESS_MSG, t("User has been saved!"))
                     reload();
@@ -76,30 +75,52 @@ const KidsPane = () => {
             .catch(err => showToast(ERROR_MSG, err.message))
     }
 
+    const handleKidCreate = async (values) => {
+        delete values.role;
+        try {
+            await apiCreateUser(token, {...values})
+            showToast(SUCCESS_MSG, t("User has been saved!"))
+            reload();
+            handleDialogClose()
+        }
+        catch (e) {
+            showToast(ERROR_MSG, e.message)
+        }
+    }
+
+
     const handleKidEdit = id => {
         apiGetUser(token, id)
             .then((data) => {
                 if (data?.user && data.user.id === id) {
-                    setDialogTitle(t("Edit User"))
-                    setDialog(<UserEditor user={data.user}
-                                          onClose={handleDialogClose}
-                                          onSubmit={(values) => handleKidUpdate(id, values)}/>)
-                    setDialogOpen(true)
+                    //          setDialogTitle(t("Edit User"))
+                    setDialog({
+                        component: <UserEditor user={data.user}
+                                               onClose={handleDialogClose}
+                                               onSubmit={(values) => handleKidUpdate(id, values)}/>,
+                        title: t("Edit User"),
+                        open: true,
+                    })
+                    //        setDialogOpen(true)
                 }
             })
             .catch(err => showToast(ERROR_MSG, err.message))
     };
 
     const handleDialogClose = () => {
-        setDialogOpen(false)
+        //setDialogOpen(false)
         setDialog(null)
-        setDialogTitle(null)
+        //setDialogTitle(null)
     }
 
     const handleKidAdd = () => {
-        setDialogTitle(t("New User"))
-        setDialog(<UserEditor onClose={handleDialogClose} onSubmit={(values) => handlePrizeCreate(values)}/>)
-        setDialogOpen(true)
+        //    setDialogTitle(t("New User"))
+        setDialog({
+            component: <UserEditor onClose={handleDialogClose} onSubmit={(values) => handleKidCreate(values)}/>,
+            title: t("New User"),
+            open: true,
+        })
+        //  setDialogOpen(true)
     };
 
     return (
@@ -115,9 +136,12 @@ const KidsPane = () => {
                 }
                 <Pager page={pageNo} total={data.total} limit={16} onChange={handlePageChange}/>
             </Grid>}
-            <ResponsiveDialog open={dialogOpen} title={dialogTitle} onClose={handleDialogClose}>
-                {dialog}
-            </ResponsiveDialog>
+            <Fab color={"primary"} sx={{position: "fixed", bottom: "2rem", right: "2rem"}} onClick={handleKidAdd}>
+                <PersonAddIcon/>
+            </Fab>
+            {dialog && <ResponsiveDialog open={dialog.open} title={dialog.title} onClose={handleDialogClose}>
+                {dialog.component}
+            </ResponsiveDialog>}
         </>
     );
 };

@@ -7,10 +7,10 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
-import {Autocomplete, FormControl, FormLabel, MenuItem} from "@mui/material";
+import {FormControl, FormLabel} from "@mui/material";
 import * as PropTypes from "prop-types";
-import {formFieldProps, stringAvatar} from "../utils/form-tools";
-import {useToken} from "../hooks/useToken";
+import {formFieldProps, stringAvatar} from "../../utils/form-tools";
+import {useToken} from "../../hooks/useToken";
 import {useTranslation} from "next-i18next";
 import DialogActions from "@mui/material/DialogActions";
 import Avatar from "@mui/material/Avatar";
@@ -67,6 +67,30 @@ const UserEditor = ({user, onClose, onSubmit}) => {
     const isAdmin = (currentUser?.role === "admin")
     const isParent = (currentUser?.role === "parent")
 
+    const baseSchema = yup.object({
+        first_name: yup.string().required(t("First Name is required")),
+        last_name: yup.string().required(t("Last Name is required")),
+        email: yup.string().email().required(t("Email is required")),
+    })
+    let schema = null;
+    if (!user) {
+        schema = baseSchema.concat(
+            yup.object(
+                {
+                    password: yup.string().min(6, t("Password should contain at least 6 characters")).required(t("Password is required"))
+                }
+            )
+        )
+    } else {
+        schema = baseSchema.concat(
+            yup.object(
+                {
+                    password: yup.string().min(6, t("Password should contain at least 6 characters"))
+                }
+            )
+        )
+    }
+
     const formik = useFormik({
         initialValues: {
             first_name: user ? user.first_name : '',
@@ -78,24 +102,15 @@ const UserEditor = ({user, onClose, onSubmit}) => {
             picture: user ? user.picture : "",
             upload: ''
         },
-        validationSchema: yup.object({
-            first_name: yup.string().required(t("First Name is required")),
-            last_name: yup.string().required(t("Last Name is required")),
-            email: yup.string().email().required(t("Email is required")),
-            password: yup.string().min(6), //.required(t("Password is required")),
-            role: yup.string().required(t("Role is required")),
-            parent_id: yup.number().integer().min(0).required(t("Parent is required")),
-        }),
+        validationSchema: schema,
         onSubmit: values => handleSubmit(values),
     })
 
-    const handleSubmit = (values) => {
-        if (onSubmit) onSubmit(values)
-    }
 
-    const handleClose = () => {
-        if (onClose) onClose()
-    };
+    const handleSubmit = async (values) => {
+        if (onSubmit) await onSubmit(values)
+        formik.setSubmitting(false)
+    }
 
     function searchUser(props) {
         // return [1,2,3]
@@ -115,40 +130,41 @@ const UserEditor = ({user, onClose, onSubmit}) => {
     //
     // }, [token, filter])
 
-    let adminFields = null;
-    if (isAdmin) {
-        adminFields = (
-            <>
-                <TextField
-                    {...formFieldProps(formik, "role", "Role")}
-                    select
-                >
-                    <MenuItem value={'admin'}>Admin</MenuItem>
-                    <MenuItem value={'parent'}>Parent</MenuItem>
-                    <MenuItem value={'kid'}>Kid</MenuItem>
-                </TextField>
+    // const adminFields = (currentUser?.role == 'admin') ?
+    //     (<>
+    //         <TextField
+    //             {...formFieldProps(formik, "role", "Role")}
+    //             select
+    //             disabled={user !== null}
+    //         >
+    //             <MenuItem value={'admin'}>Admin</MenuItem>
+    //             <MenuItem value={'parent'}>Parent</MenuItem>
+    //             <MenuItem value={'kid'}>Kid</MenuItem>
+    //         </TextField>
+    //
+    //         <Autocomplete
+    //             disabled={user !== null}
+    //             autoComplete
+    //             autoSelect
+    //             // id="combo-box-demo"
+    //             options={userList}
+    //             getOptionLabel={(option) => option?.email}
+    //
+    //             onInputChange={(event, newValue) => {
+    //                 setFilter(newValue);
+    //             }}
+    //             //filterOptions={(x) => x.email}
+    //             sx={{width: 300}}
+    //             renderInput={(params) =>
+    //                 <TextField2 {...params}
+    //                             fullWidth
+    //                             {...formFieldProps(formik, "parent_id", "Parent")}
+    //
+    //                 />}
+    //         />
+    //     </>)
+    //     : null
 
-                <Autocomplete
-                    autoComplete
-                    autoSelect
-                    // id="combo-box-demo"
-                    options={userList}
-                    getOptionLabel={(option) => option?.email}
-
-                    onInputChange={(event, newValue) => {
-                        setFilter(newValue);
-                    }}
-                    //filterOptions={(x) => x.email}
-                    sx={{width: 300}}
-                    renderInput={(params) =>
-                        <TextField2 {...params}
-                                    fullWidth
-                                    {...formFieldProps(formik, "parent_id", "Parent")}
-                        />}
-                />
-            </>
-        )
-    }
 
     return (
         <Container component="main" maxWidth="sm">
@@ -179,26 +195,30 @@ const UserEditor = ({user, onClose, onSubmit}) => {
 
                 <TextField
                     {...formFieldProps(formik, "password", "Password")}
-                    required
+                    required={!user}
                     type="password"
                     autoComplete="new-password"
                 />
 
-                {adminFields}
+                {/*{adminFields}*/}
+
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Avatar</FormLabel>
                     <Grid container alignItems={"center"}>
                         <Avatar {...stringAvatar(
-                            formik.values['first_name'] + ' ' + formik.values['last_name'], 80)}/>
+                            formik.values['first_name'], formik.values['last_name'], 80)}/>
                         <FileUpload label={t("Change")}
                                     name={"upload"}
-                                    onChange={(e)=>formik.setFieldValue("upload", e.target.files[0])}
+                                    onChange={(e) => formik.setFieldValue("upload", e.target.files[0])}
                         />
                     </Grid>
                 </FormControl>
                 <DialogActions>
-                    <Button variant={"contained"} onClick={handleClose}>{t("Cancel")}</Button>
-                    <Button variant={"contained"} type={'submit'}>{t("Save")}</Button>
+                    <Button variant={"contained"} onClick={onClose}>{t("Cancel")}</Button>
+                    <Button variant={"contained"}
+                            type={'submit'}
+                            disabled={formik.isSubmitting}>
+                        {t("Save")}</Button>
                 </DialogActions>
             </form>
         </Container>

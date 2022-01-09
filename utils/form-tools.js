@@ -33,13 +33,18 @@ export function stringToColor(string) {
 }
 
 
-export function stringAvatar(name, size = 32) {
+export function stringAvatar(first_name, last_name, size = 32) {
+    let name = (first_name.length > 0 ? first_name[0] : "") + (last_name.length > 0 ? last_name[0] : "");
+    if (name === "") name = "?";
+
     return {
         sx: {
-            backgroundColor: stringToColor(name),
-            width: size+'px',
-            height: size+'px',
+            backgroundColor: stringToColor(first_name + ' ' + last_name),
+            width: size + 'px',
+            height: size + 'px',
         },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        children: name,
     };
 }
+
+export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
