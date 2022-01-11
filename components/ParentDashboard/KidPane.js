@@ -1,8 +1,7 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {apiGetUser} from "../../utils/api";
+import {useState} from "react";
 import {Loader} from "../UI/Loader";
-import {Container, IconButton, Paper, Tab, Tabs, Toolbar} from "@mui/material";
+import {Container, Grid, IconButton, Paper, Tab, Tabs, Toolbar} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
 import * as PropTypes from "prop-types";
 import TabPanel from "../UI/TabPanel";
@@ -13,9 +12,9 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import PrizePane from "./Prizes/PrizePane";
 import TaskPane from "./Tasks/TaskPane";
 import {useTranslation} from "next-i18next";
-import {ERROR_MSG, showToast} from "../../utils/toasts";
 import Link from "../UI/Link";
-
+import StarIcon from '@mui/icons-material/Star';
+import Typography from "@mui/material/Typography";
 
 function Slot({children}) {
     return (
@@ -28,10 +27,11 @@ function Slot({children}) {
 Slot.propTypes = {children: PropTypes.node};
 
 const KidPane = ({kid}) => {
+    const [token, _, user] = useToken()
     const [activeTab, setActiveTab] = useState(0);
     const {t} = useTranslation()
 
-    if (!kid) return <Loader/>
+    if (!kid || !user) return <Loader/>
 
     const handleChange = (event, value) => {
         setActiveTab(value)
@@ -40,9 +40,14 @@ const KidPane = ({kid}) => {
     return (
         <>
             <Toolbar>
-                <IconButton size={"large"} component={Link} href={'/dashboard'}><ArrowBack/></IconButton>
-                <h1>{kid.first_name} {kid.last_name}</h1>
-                {kid.points}
+                <Grid container alignItems={"center"}>
+                    {user.role !== "kid" &&
+                    <IconButton size={"large"} component={Link} href={'/dashboard'}><ArrowBack/></IconButton>
+                    }
+                    <Typography variant="h4" component="h1" mr={3}>{kid.first_name} {kid.last_name}</Typography>
+                    <StarIcon color={"warning"} sx={{height: "24px", width: "24px"}}/>
+                    <h2>{kid.points}</h2>
+                </Grid>
             </Toolbar>
 
             <Container>

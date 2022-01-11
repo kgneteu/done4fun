@@ -123,8 +123,8 @@ export async function apiCreatePrize(token, userId, prize) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-export async function apiGetAvailableTasks(token, taskId) {
-    return await apiCall(`/auth/user/${taskId}/tasks/available`, 'GET', token)
+export async function apiGetAvailableTasks(token, kidId, dateFrom, dateTo) {
+    return await apiCall(`/auth/user/${kidId}/tasks/available?date_from=${dateFrom.toISOString()}&date_to=${dateTo.toISOString()}`, 'GET', token)
 }
 
 export async function apiDeleteTask(token, taskId) {

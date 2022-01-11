@@ -1,24 +1,17 @@
-import {useState} from "react";
-import Grid from "@mui/material/Grid";
-import KidsPane from "../ParentDashboard/Kids/KidsPane";
-import KidPane from "../ParentDashboard/KidPane";
 import * as React from "react";
+import KidPane from "../ParentDashboard/KidPane";
+import {useToken} from "../../hooks/useToken";
+import {Loader} from "../UI/Loader";
 
 
-function KidDashboard() {
-  const [view, setView] = useState(0);
-  const [selectedKid, setSelectedKid] = useState(3);
+const KidDashboard = () => {
+    const [token, _, user] = useToken()
 
-  function kidSelectedHandler(id) {
-    setSelectedKid(id)
-    setView(1)
-  }
+    if (!token) return <Loader/>
+    return (
+        <KidPane kid={user}/>
+    )
 
-  return (
-      <Grid>
-        {/*{view == 0 && <KidsPane onKidSelect={kidSelectedHandler}/>}*/}
-        {view == 0 && <KidPane kidId={selectedKid}/>}
-      </Grid>
-  );
-}
+};
+
 export default KidDashboard;

@@ -62,10 +62,10 @@ export const TaskEditor = ({task, onClose, onSubmit}) => {
                         renderInput={(props) =>
                             <TextField {...props} />}
                         label="Start Date"
-                        // value={value}
-                        // onChange={(newValue) => {
-                        //     setValue(newValue);
-                        // }}
+                        value={formik.values["start_at"]}
+                        onChange={(newValue) => {
+                             formik.setFieldValue("start_at", newValue)
+                         }}
                     />
                 </LocalizationProvider>
                 <TextField

@@ -32,6 +32,7 @@ async function RefreshToken(refreshToken) {
             access_token: responseData.token,
             refresh_token: responseData.refresh_token,
             picture: user.picture,
+            points: user.points,
             refresh_time: Date.now() + process.env.REFRESH_TOKEN_MIN * 1000 * 60,
         }
     } catch (error) {
@@ -90,7 +91,8 @@ export default NextAuth({
                             email: apiUser.user.email,
                             name: apiUser.user.first_name,
                             access_token: apiUser.token,
-                            image: apiUser.user.image,
+                            picture: apiUser.user.picture,
+                            points: apiUser.user.points,
                             role: apiUser.user.role,
                             first_name: apiUser.user.first_name,
                             last_name: apiUser.user.last_name,
@@ -151,7 +153,9 @@ export default NextAuth({
                 token.access_token = user.access_token;
                 token.refresh_token = user.refresh_token;
                 token.picture = user.picture;
+                token.points = user.points;
                 token.refresh_time = Date.now() + process.env.REFRESH_TOKEN_MIN * 1000 * 60;
+                console.log('uuuuuuuuuuuuuuuuuuuuu',user)
             }
             if (token.refresh_time < Date.now()) {
                 token = await RefreshToken(token.refresh_token);
@@ -168,7 +172,9 @@ export default NextAuth({
                         role: token.role,
                         access_token: token.access_token,
                         picture: token.picture,
+                        points: token.points
                     }
+                    console.log(session)
                     return session
                 }
             }
