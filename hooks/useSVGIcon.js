@@ -1,35 +1,29 @@
 import {useEffect, useRef, useState} from "react";
+import dynamic from 'next/dynamic'
 
-const useSVGIcon = (name, options = {}) => {
+const useSVGIcon = (name) => {
     const ImportedIconRef = useRef();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState();
+    const [error, setError] = useState(false);
 
-    const { onCompleted, onError } = options;
     useEffect(() => {
         setLoading(true);
-        const importIcon = async () => {
+        const importIcon = () => {
             try {
-                // ImportedIconRef.current = (
-                //     await import(`./${name}.svg`)
-                // ).ReactComponent;
-                ImportedIconRef.current = (await import(`!!@svgr/webpack?-svgo,+titleProp,+ref!./${name}.svg`)).default;
-                if (onCompleted) {
-                    onCompleted(name, ImportedIconRef.current);
-                }
+                const x ="1";
+                const fname = `/public/images/icons/tasks/1`
+                ImportedIconRef.current = dynamic(()=> import(`${fname}.svg`),{ ssr: false });
+                console.log(ImportedIconRef.current)
             } catch (err) {
-                if (onError) {
-                    onError(err);
-                }
                 setError(err);
             } finally {
                 setLoading(false);
             }
         };
         importIcon();
-    }, [name, onCompleted, onError]);
+    }, [name]);
 
-    return { error, loading, SvgIcon: ImportedIconRef.current };
+    return { error, loading, icon: ImportedIconRef.current };
 };
 
 export default useSVGIcon

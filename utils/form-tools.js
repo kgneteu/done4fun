@@ -1,3 +1,5 @@
+import {getLuminance} from "@mui/material";
+
 export function formFieldProps(formik, name, label, fullWidth = true) {
     return {
         ...formik.getFieldProps(name),
@@ -30,6 +32,14 @@ export function stringToColor(string) {
     /* eslint-enable no-bitwise */
 
     return color;
+}
+
+export function getContrastColor(bkColor) {
+    const l = getLuminance(bkColor);
+    if (l <= 0.5)
+        return "#fff"
+    else
+        return "#000";
 }
 
 
