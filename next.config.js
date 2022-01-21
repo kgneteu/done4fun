@@ -13,7 +13,30 @@ module.exports = {
             {
                 test: /\.svg$/i,
                 issuer: /\.[jt]sx?$/,
-                use: ['@svgr/webpack'],
+                use: [
+                    {
+                        loader: '@svgr/webpack',
+                        options: {
+                            prettier: false,
+                            svgo: true,
+                            icon: true,
+                            svgoConfig: {
+                                plugins: [
+                                    {
+                                        name: 'preset-default',
+                                        params: {
+                                            overrides: {
+                                                // customize default plugin options
+                                                removeViewBox: false,
+                                            },
+                                        },
+                                    },
+                                ],
+                            },
+                            titleProp: true,
+                        },
+                    },
+                ],
             })
         return config
     },

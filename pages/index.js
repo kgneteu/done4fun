@@ -5,6 +5,9 @@ import {useSession} from "next-auth/react";
 import {getResourceCollectionFromContext} from "next-drupal";
 import * as PropTypes from "prop-types";
 import {FrontVideo} from "../components/FrontVideo";
+import {DynamicIcon} from "../components/ParentDashboard/Tasks/DynamicIcon";
+import {stringToColor} from "../utils/form-tools";
+import * as React from "react";
 
 function Trailers({posts = null}) {
 
@@ -35,6 +38,7 @@ export default function Home(props) {
     return (
         <>
             <h1>{t('Home page')}</h1>
+            <DynamicIcon type={'prizes'} name={24} color={stringToColor("aaa")}/>
             <ul>
                 <li><Link href={"/admin"}>Admin page</Link></li>
                 <li><Link href={"/kid"}>{t('Kid page')}</Link></li>
