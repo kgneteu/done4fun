@@ -33,6 +33,7 @@ yarn-error.log*
 
 # Idea
 .idea
+/api/.idea
 
 .env.development
 .env.production

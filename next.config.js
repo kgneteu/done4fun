@@ -7,10 +7,6 @@ module.exports = {
     webpack(config) {
         config.module.rules.push(
             {
-                type: 'asset',
-                resourceQuery: /url/, // *.svg?url
-            },
-            {
                 test: /\.svg$/i,
                 issuer: /\.[jt]sx?$/,
                 use: [
@@ -26,7 +22,6 @@ module.exports = {
                                         name: 'preset-default',
                                         params: {
                                             overrides: {
-                                                // customize default plugin options
                                                 removeViewBox: false,
                                             },
                                         },

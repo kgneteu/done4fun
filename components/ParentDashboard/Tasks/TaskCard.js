@@ -1,17 +1,28 @@
-import {Card, CardActions, CardContent} from "@mui/material";
-import SVG from "../../SVG";
+import {Card, CardActions, CardContent, Fab, Grid} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CasinoIcon from "@mui/icons-material/Casino";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import dynamic from 'next/dynamic'
-import {DynamicIcon} from "./DynamicIcon";
+import {DynamicIcon} from "../../UI/DynamicIcon";
 import {stringToColor} from "../../../utils/form-tools";
 
+
+function RoundButton({color,children, ...rest}) {
+
+    return (
+        <Fab {...rest}>{children}</Fab>
+    )
+}
+
+RoundButton.propTypes = {
+    color: PropTypes.string,
+    size: PropTypes.string,
+    children: PropTypes.node
+};
 
 export function TaskCard({task, onTaskEdit, onTaskDelete}) {
     const x = "2";
@@ -23,30 +34,23 @@ export function TaskCard({task, onTaskEdit, onTaskDelete}) {
     //const {error, loading, icon} = useSVGIcon(`22`)
     //console.log(error, loading, icon)
     return (
-        <Card sx={{width: "180px"}}>
-            {/*<SvgIcon color={'primary'} width={32} height={32} component={`/images/icons/tasks/${task.icon}.svg`}/>*/}
-            {/*<Suspense fallback={`loading`}>*/}
-            <DynamicIcon type={'tasks'} name={task.icon} color={stringToColor(task.action)}/>
-            {/*<DynamicLazyComponent type={'tasks'} name={task.icon}*/}
-            {/*</Suspense>*/}
-            <img width={32} height={32} src={`/images/icons/tasks/${task.icon}.svg`}/>
-            <SVG width={32} height={32} src={`assets/icons/tasks/${task.icon}.svg?url`}/>
+        <Card sx={{width: "280px"}}>
             <CardContent>
-                <Typography variant="body2" color="text.secondary" noWrap>
-                    {task.action}
-                </Typography>
+                    <DynamicIcon type={'tasks'} name={task.icon} color={stringToColor(task.action)}/>
+                    <Typography variant="body2">
+                        {task.action}
+                    </Typography>
             </CardContent>
-
             <CardActions disableSpacing={true}>
                 <CasinoIcon color={"disabled"}/>{task.points}
                 <Box sx={{flexGrow: 1}}/>
-                <IconButton onClick={onTaskEdit} color={'primary'}>
+                <RoundButton size="small" onClick={onTaskEdit} color={'primary'}>
                     <EditIcon/>
-                </IconButton>
+                </RoundButton>
 
-                <IconButton onClick={onTaskDelete} color={'error'}>
+                <RoundButton size="small" onClick={onTaskDelete}>
                     <DeleteIcon/>
-                </IconButton>
+                </RoundButton>
             </CardActions>
         </Card>);
 }

@@ -2,11 +2,11 @@ import dynamic from "next/dynamic";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import {Grid} from "@mui/material";
-import {getContrastColor} from "../../../utils/form-tools";
+import {getContrastColor} from "../../utils/form-tools";
 
 export const DynamicIcon = ({type, name, size = 64, color = '#000'}) => {
     const DynamicComponent = dynamic(() => import(`!@svgr/webpack!/public/images/icons/${type}/${name}.svg`), {
-        ssr: false,
+        ssr:false,
     })
     const offset = size * 0.2;
     return (

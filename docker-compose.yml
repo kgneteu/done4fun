@@ -9,9 +9,9 @@ services:
       - done4fun
   api:
     build:
-      context: ../done4fun-api/
+      context: ./api/
     env_file:
-      - ../done4fun-api/.env
+      - ./api/.env
     depends_on:
       - postgres
     ports:
