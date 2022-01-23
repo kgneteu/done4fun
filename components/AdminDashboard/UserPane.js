@@ -12,6 +12,9 @@ import UserEditor from "../Shared/UserEditor";
 import ResponsiveDialog from "../UI/ResponsiveDialog";
 import {Fab} from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import {BoardHeader} from "../UI/BoardHeader";
+import {Board} from "../UI/Board";
+import Typography from "@mui/material/Typography";
 
 export function UserPane() {
     const [token, status, user] = useToken()
@@ -100,15 +103,20 @@ export function UserPane() {
     if (data && data.users) {
         const pager = <Pager page={pageNo} total={data.total} limit={20} onChange={handlePageChange}/>
         userTable =
-            <UserTable users={data.users} pager={pager} onUserDelete={handleUserDelete} onUserEdit={handleUserEdit} adminId={user.id}/>
+            <UserTable users={data.users} pager={pager} onUserDelete={handleUserDelete} onUserEdit={handleUserEdit}
+                       adminId={user.id}/>
     }
     return (
         <>
-            <h1>{t("Users")}</h1>
-            {userTable}
-            <Fab color={"primary"} sx={{position: "fixed",bottom:"2rem", right:"2rem"}} onClick={handleUserAdd}>
-                <PersonAddIcon/>
-            </Fab>
+            <BoardHeader>
+                <Typography variant="h4" component="h1" mr={3}>{t("Users")}</Typography>
+            </BoardHeader>
+            <Board>
+                {userTable}
+                <Fab color={"primary"} sx={{position: "fixed", bottom: "2rem", right: "2rem"}} onClick={handleUserAdd}>
+                    <PersonAddIcon/>
+                </Fab>
+            </Board>
             <ResponsiveDialog open={dialogOpen} title={dialogTitle} onClose={handleDialogClose}>
                 {dialog}
             </ResponsiveDialog>

@@ -12,7 +12,7 @@ const theme = createTheme({
         },
 
         error: {
-            main: red.A400,
+            main: red["700"],
         },
         background: {
             default: grey["50"],

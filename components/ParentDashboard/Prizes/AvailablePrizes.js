@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import {grey} from "@mui/material/colors";
-import {Grid} from "@mui/material";
+import {Fab, Grid} from "@mui/material";
 import {PrizeCard} from "./PrizeCard";
 import ResponsiveDialog from "../../UI/ResponsiveDialog";
 import {PrizeEditor} from "./PrizeEditor";
@@ -105,11 +105,6 @@ export const AvailablePrizes = ({user: kid}) => {
 
         return (
             <>
-                <IconButton color="primary" aria-label="edit" size="medium"
-                            onClick={() => handlePrizeAdd()}>
-                    <AddIcon/>
-                    <Typography>{t("Add Prize")}</Typography>
-                </IconButton>
                 <Box sx={{p: 2, backgroundColor: grey.A200}}>
                     <Grid container spacing={2} justifyContent={"center"}>
                         {prizes && prizes.map(prize => (
@@ -121,6 +116,9 @@ export const AvailablePrizes = ({user: kid}) => {
                         ))}
                     </Grid>
                 </Box>
+                <Fab color={"primary"} sx={{position: "fixed", bottom: "2rem", right: "2rem"}} onClick={handlePrizeAdd}>
+                    <AddIcon/>
+                </Fab>
                 {dialog && <ResponsiveDialog open={true} title={dialog.title} onClose={handleDialogClose}>
                     {dialog.component}
                 </ResponsiveDialog>}

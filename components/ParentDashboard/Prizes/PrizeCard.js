@@ -10,15 +10,13 @@ import * as React from "react";
 import * as PropTypes from "prop-types";
 import {DynamicIcon} from "../../UI/DynamicIcon";
 import {stringToColor} from "../../../utils/form-tools";
+import {RoundButton} from "../Tasks/RoundButton";
 
 export function PrizeCard({prize, onPrizeEdit, onPrizeDelete}) {
     return (
-        <Card sx={{width: "180px"}}>
-            {/*<SvgIcon color={'primary'} width={32} height={32} component={`/images/icons/prizes/${prize.icon}.svg`}/>*/}
-            <DynamicIcon type={'prizes'} name={prize.icon} color={stringToColor(prize.name)}/>
-            {/*<img width={32} height={32} src={`/images/icons/prizes/${prize.icon}.svg`}/>*/}
-            {/*<SVG width={32} height={32} src={`assets/icons/prizes/${prize.icon}.svg?url`}/>*/}
+        <Card sx={{width: "240px"}}>
             <CardContent>
+                <DynamicIcon type={'prizes'} name={prize.icon} color={stringToColor(prize.name)}/>
                 <Typography variant="body2" color="text.secondary" noWrap>
                     {prize.name}
                 </Typography>
@@ -27,13 +25,13 @@ export function PrizeCard({prize, onPrizeEdit, onPrizeDelete}) {
             <CardActions disableSpacing={true}>
                 <CasinoIcon color={"disabled"}/>{prize.points}
                 <Box sx={{flexGrow: 1}}/>
-                <IconButton onClick={onPrizeEdit} color={'primary'}>
+                <RoundButton onClick={onPrizeEdit} color={'primary'} size={'small'}>
                     <EditIcon/>
-                </IconButton>
+                </RoundButton>
 
-                <IconButton onClick={onPrizeDelete} color={'error'}>
+                <RoundButton onClick={onPrizeDelete} color={'error'} sx={{ml:1}} size={'small'}>
                     <DeleteIcon/>
-                </IconButton>
+                </RoundButton>
             </CardActions>
         </Card>);
 }

@@ -4,15 +4,16 @@ import {apiGetUser} from "../../../utils/api";
 import {Loader} from "../../../components/UI/Loader";
 import KidPane from "../../../components/ParentDashboard/KidPane";
 import * as React from "react";
+import {BackBoard} from "../../../components/UI/BackBoard";
 
 const KidPage = ({kid}) => {
     if (!kid){
         return <Loader/>
     }
     return (
-        <div>
+        <BackBoard>
             <KidPane kid={kid}/>
-        </div>
+        </BackBoard>
     );
 };
 

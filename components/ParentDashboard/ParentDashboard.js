@@ -1,13 +1,13 @@
 import * as React from "react";
-import Grid from "@mui/material/Grid";
 import KidsPane from "./Kids/KidsPane";
+import {BackBoard} from "../UI/BackBoard";
 
 
 const ParentDashboard = () => {
     return (
-        <Grid>
+        <BackBoard>
             <KidsPane/>
-        </Grid>
+        </BackBoard>
     );
 };
 

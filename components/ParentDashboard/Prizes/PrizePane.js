@@ -21,7 +21,9 @@ function PrizePane({user: kid}) {
     return (
         <Box sx={{width: '100%'}}>
             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                <Tabs value={activeTab} onChange={(e, v) => setActiveTab(v)}>
+                <Tabs value={activeTab} onChange={(e, v) => setActiveTab(v)}
+                      variant="fullWidth"
+                >
                     <Tab icon={<AttractionsIcon/>} iconPosition="start" label={t("Available")}/>
                     <Tab icon={<DepartureBoardIcon/>} iconPosition="start" label={t("Awaiting")}/>
                     <Tab icon={<HistoryIcon/>} iconPosition="start" label={t("Collected")}/>

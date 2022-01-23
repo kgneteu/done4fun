@@ -3,7 +3,7 @@ import {useState} from "react";
 import {useTranslation} from "next-i18next";
 import {Loader} from "../../UI/Loader";
 import Box from "@mui/material/Box";
-import {Tab, Tabs} from "@mui/material";
+import {Paper, Tab, Tabs} from "@mui/material";
 import AttractionsIcon from "@mui/icons-material/Attractions";
 import DepartureBoardIcon from "@mui/icons-material/DepartureBoard";
 import HistoryIcon from "@mui/icons-material/History";
@@ -16,14 +16,16 @@ function TaskPane({user: kid}) {
     const {t} = useTranslation();
     if (!kid) return <Loader/>
     return (
-        <Box sx={{width: '100%'}}>
-            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+        <Box>
+            <Paper>
+            {/*<Box sx={{borderBottom: 1, borderColor: 'divider'}}>*/}
                 <Tabs value={activeTab} onChange={(e, v) => setActiveTab(v)}>
                     <Tab icon={<AttractionsIcon/>} iconPosition="start" label={t("Available")}/>
                     <Tab icon={<DepartureBoardIcon/>} iconPosition="start" label={t("Awaiting")}/>
                     <Tab icon={<HistoryIcon/>} iconPosition="start" label={t("Collected")}/>
                 </Tabs>
-            </Box>
+            </Paper>
+            {/*</Box>*/}
             <TabPanel index={0} value={activeTab}>
                 <AvailableTasks user={kid}/>
             </TabPanel>

@@ -10,6 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Image from 'next/image'
 import {stringAvatar} from "../../../utils/form-tools";
+import {RoundButton} from "../Tasks/RoundButton";
 
 const UserAvatar = ({user, size}) => {
         //todo better avatar in cicrle
@@ -39,7 +40,7 @@ UserAvatar.propTypes = {};
 
 const KidCard = ({user, onKidEdit, onKidDelete}) => {
     return (
-        <Card sx={{maxWidth: 345, minWidth: 160}}>
+        <Card sx={{maxWidth: 345, minWidth: 180}}>
             <CardActionArea component={Link} href={`/dashboard/kid/${user.id}`}>
                 <CardContent>
                     <Grid container direction={"column"} alignItems={"center"}>
@@ -58,12 +59,12 @@ const KidCard = ({user, onKidEdit, onKidDelete}) => {
                     <MoreHorizIcon/>
                 </IconButton>
                 <Box sx={{flexGrow: 1}}/>
-                <IconButton onClick={onKidEdit} color={'primary'}>
+                <RoundButton onClick={onKidEdit} color={'primary'} size={'small'}>
                     <EditIcon/>
-                </IconButton>
-                <IconButton onClick={onKidDelete} color={'error'}>
+                </RoundButton>
+                <RoundButton onClick={onKidDelete} color={'error'} size={'small'} sx={{ml:1}}>
                     <DeleteIcon/>
-                </IconButton>
+                </RoundButton>
             </CardActions>
         </Card>
     )

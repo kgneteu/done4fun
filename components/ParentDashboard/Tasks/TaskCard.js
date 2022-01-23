@@ -1,4 +1,4 @@
-import {Card, CardActions, CardContent, Fab, Grid} from "@mui/material";
+import {Card, CardActions, CardContent} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import CasinoIcon from "@mui/icons-material/Casino";
 import Box from "@mui/material/Box";
@@ -9,20 +9,10 @@ import * as PropTypes from "prop-types";
 import dynamic from 'next/dynamic'
 import {DynamicIcon} from "../../UI/DynamicIcon";
 import {stringToColor} from "../../../utils/form-tools";
+import {RoundButton} from "./RoundButton";
 
 
-function RoundButton({color,children, ...rest}) {
 
-    return (
-        <Fab {...rest}>{children}</Fab>
-    )
-}
-
-RoundButton.propTypes = {
-    color: PropTypes.string,
-    size: PropTypes.string,
-    children: PropTypes.node
-};
 
 export function TaskCard({task, onTaskEdit, onTaskDelete}) {
     const x = "2";
@@ -48,7 +38,7 @@ export function TaskCard({task, onTaskEdit, onTaskDelete}) {
                     <EditIcon/>
                 </RoundButton>
 
-                <RoundButton size="small" onClick={onTaskDelete}>
+                <RoundButton size="small" onClick={onTaskDelete} color={'error'} sx={{ml:1}}>
                     <DeleteIcon/>
                 </RoundButton>
             </CardActions>

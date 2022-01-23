@@ -1,9 +1,15 @@
 import Logo from '../assets/images/logo.svg'
-import Image from "next/image";
+import Link from "./UI/Link";
+import {Grid} from "@mui/material";
+
 const AppLogo = (props) => {
+    const size=56;
     return (
-        // <img src={logo} height={32} width={32} alt={"Done4Fun"}/>
-        <Logo width={64} height={64}/>
+        <Link href={'/'}>
+            <Grid container alignItems={"center"}>
+                <Logo width={size} height={size}/>
+            </Grid>
+        </Link>
     )
 
 };

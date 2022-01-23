@@ -8,6 +8,7 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import IconButton from "@mui/material/IconButton";
 import {Paper} from "@mui/material";
 import {useTranslation} from "next-i18next";
+import {RoundButton} from "../ParentDashboard/Tasks/RoundButton";
 
 
 export const UserTable = ({users, pager, onUserDelete, onUserEdit, adminId}) => {
@@ -31,18 +32,20 @@ export const UserTable = ({users, pager, onUserDelete, onUserEdit, adminId}) => 
                                 <Td>{user.first_name + ' ' + user.last_name}</Td>
                                 <Td>{user.role}</Td>
                                 <Td>{user.email}</Td>
-                                <Td>
-                                    <IconButton color="primary" aria-label="edit" size="medium"
+                                <Td align={"right"}>
+                                    <RoundButton color="primary" aria-label="edit" size="small"
                                                 onClick={() => onUserEdit(user.id)}>
                                         <EditIcon/>
-                                    </IconButton>
+                                    </RoundButton>
                                     {user.id != adminId &&
-                                    <IconButton color="error"
+                                    <RoundButton color="error"
                                                 aria-label="delete"
-                                                size="medium"
-                                                onClick={() => onUserDelete(user.id)}>
+                                                size="small"
+                                                onClick={() => onUserDelete(user.id)}
+                                                sx={{ml:1}}
+                                    >
                                         <DeleteIcon/>
-                                    </IconButton>
+                                    </RoundButton>
                                     }
                                 </Td>
                             </Tr>

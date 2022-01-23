@@ -10,7 +10,7 @@ export function Layout({children}) {
         <Grid direction="column" container minHeight={"100%"}>
             <Header/>
             <Grid flexGrow={1} container>
-                <Box component="main" flex={"1 1"} p={'1rem'}>
+                <Box component="main" flex={"1 1"}>
                     {children}
                 </Box>
             </Grid>

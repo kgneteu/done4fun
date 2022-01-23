@@ -12,7 +12,13 @@ import ResponsiveDialog from "../../UI/ResponsiveDialog";
 import UserEditor from "../../Shared/UserEditor";
 import {useDeleteConfirm} from "../../../hooks/useDeleteConfirm";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import {Fab} from "@mui/material";
+import {Container, Fab} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
+import {grey} from "@mui/material/colors";
+import {Board} from "../../UI/Board";
+import {BoardHeader} from "../../UI/BoardHeader";
 
 
 const KidsPane = () => {
@@ -82,8 +88,7 @@ const KidsPane = () => {
             showToast(SUCCESS_MSG, t("User has been saved!"))
             reload();
             handleDialogClose()
-        }
-        catch (e) {
+        } catch (e) {
             showToast(ERROR_MSG, e.message)
         }
     }
@@ -125,20 +130,26 @@ const KidsPane = () => {
 
     return (
         <>
-            {data?.users &&
-            <Grid container spacing={2} justifyContent={"center"}>
-                {data.users.map(user =>
-                    <Grid item key={user.id}>
-                        <KidCard user={user}
-                                 onKidDelete={() => handleKidDelete(user.id)}
-                                 onKidEdit={() => handleKidEdit(user.id)}/>
-                    </Grid>)
+            <BoardHeader>
+                <Typography variant="h4" component="h1" mr={3}>{t('Kids')}</Typography>
+            </BoardHeader>
+            <Board>
+                {data?.users &&
+                    <Grid container spacing={2} justifyContent={"center"}>
+                        {data.users.map(user =>
+                            <Grid item key={user.id}>
+                                <KidCard user={user}
+                                         onKidDelete={() => handleKidDelete(user.id)}
+                                         onKidEdit={() => handleKidEdit(user.id)}/>
+                            </Grid>)
+                        }
+                        <Pager page={pageNo} total={data.total} limit={16} onChange={handlePageChange}/>
+                    </Grid>
                 }
-                <Pager page={pageNo} total={data.total} limit={16} onChange={handlePageChange}/>
-            </Grid>}
-            <Fab color={"primary"} sx={{position: "fixed", bottom: "2rem", right: "2rem"}} onClick={handleKidAdd}>
-                <PersonAddIcon/>
-            </Fab>
+                <Fab color={"primary"} sx={{position: "fixed", bottom: "2rem", right: "2rem"}} onClick={handleKidAdd}>
+                    <PersonAddIcon/>
+                </Fab>
+            </Board>
             {dialog && <ResponsiveDialog open={dialog.open} title={dialog.title} onClose={handleDialogClose}>
                 {dialog.component}
             </ResponsiveDialog>}

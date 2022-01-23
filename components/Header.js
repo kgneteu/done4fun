@@ -6,7 +6,24 @@ import AppLogo from "./AppLogo";
 import Button from "@mui/material/Button";
 import * as React from "react";
 import {useRouter} from "next/router";
-import {MenuItem, Select} from "@mui/material";
+import {MenuItem, Select, useScrollTrigger} from "@mui/material";
+import Box from "@mui/material/Box";
+
+function ElevationScroll(props) {
+    const { children, window } = props;
+    // Note that you normally won't need to set the window ref as useScrollTrigger
+    // will default to window.
+    // This is only being set here because the demo is in an iframe.
+    const trigger = useScrollTrigger({
+        disableHysteresis: true,
+        threshold: 0,
+        target: window ? window() : undefined,
+    });
+
+    return React.cloneElement(children, {
+        elevation: trigger ? 4 : 0,
+    });
+}
 
 export const Header = () => {
     const {data: session, status} = useSession()
@@ -20,11 +37,13 @@ export const Header = () => {
     };
 
     return (
-        <AppBar position="sticky" enableColorOnDark={true} color={'default'}>
-            <Toolbar>
-                <Link href={'/'} sx={{flexGrow: 1}}>
+        <ElevationScroll>
+        <AppBar position="sticky" enableColorOnDark={true} color={'default'} elevation={0}>
+            <Toolbar sx={{alignContent:"center"}}>
+                {/*<Link href={'/'}>*/}
                     <AppLogo/>
-                </Link>
+                {/*</Link>*/}
+                <Box sx={{flexGrow: 1}}/>
                 <Select value={locale} onChange={handleLanguageChange}>
                     {locales && locales.map(lang => (
                         <MenuItem key={lang} value={lang}>{lang}</MenuItem>
@@ -34,5 +53,6 @@ export const Header = () => {
                 {!loading && !session && <Button color="inherit" onClick={() => signIn()}>Sign In</Button>}
             </Toolbar>
         </AppBar>
+        </ElevationScroll>
     )
 };
