@@ -49,13 +49,17 @@ services:
       - ./docker/mysql/.env
     volumes:
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
-#    ports:
-#      - "3307:3306"
+    #    ports:
+    #      - "3307:3306"
     restart: always
     networks:
       - done4fun
-#  certbot:
-#    image: certbot/certbot
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./cert:/etc/letsencrypt
+      - ./cert/challenge:/var/www/html
+    command: certonly --email done4funapp@gmail.com --agree-tos --no-eff-email --staging --webroot --webroot-path=/var/www/html -d api.done4fun.kgnet.eu -d cms.done4fun.kgnet.eu -d done4fun.kgnet.eu
 #  web:
 #    image: nginx:latest
 #    ports:
