@@ -15,9 +15,6 @@ import PlFlag from "flag-icons/flags/1x1/pl.svg"
 
 function ElevationScroll(props) {
     const {children, window} = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
@@ -142,7 +139,6 @@ export const Header = () => {
     const {pathname, asPath, query, locale, locales} = router;
 
     const handleLanguageChange = (lang) => {
-        // const lang = event.target.value;
         router.push({pathname, query}, asPath, {locale: lang}).then()
     };
 
