@@ -10,7 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Image from 'next/image'
 import {stringAvatar} from "../../../utils/form-tools";
-import {RoundButton} from "../Tasks/RoundButton";
+import {RoundButton} from "../../UI/RoundButton";
 
 const UserAvatar = ({user, size}) => {
         //todo better avatar in cicrle

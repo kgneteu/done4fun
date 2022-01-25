@@ -6,41 +6,60 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import dynamic from 'next/dynamic'
 import {DynamicIcon} from "../../UI/DynamicIcon";
 import {stringToColor} from "../../../utils/form-tools";
-import {RoundButton} from "./RoundButton";
+import {RoundButton} from "../../UI/RoundButton";
+import {useToken} from "../../../hooks/useToken";
+import {Loader} from "../../UI/Loader";
+import CheckIcon from "@mui/icons-material/Check";
+import CancelIcon from "@mui/icons-material/Close";
+import {useTranslation} from "next-i18next";
 
+export function TaskCard({task, onTaskEdit, onTaskDelete, onTaskConfirm, onTaskCancel}) {
+    const [token, _, user] = useToken()
+    const {t} = useTranslation()
+    if (!token) return <Loader/>
+    let buttons = null;
 
-
-
-export function TaskCard({task, onTaskEdit, onTaskDelete}) {
-    const x = "2";
-    const DynamicLazyComponent = dynamic(() => import(`!@svgr/webpack!/public/images/icons/tasks/${x}.svg`), {
-        ssr: false,
-    })
-    //const {error, loading, icon} = useSVGIcon(`/images/icons/tasks/${task.icon}.svg`,{})
-
-    //const {error, loading, icon} = useSVGIcon(`22`)
-    //console.log(error, loading, icon)
+    if (user.role == "kid") {
+        buttons = (
+            <>
+                <RoundButton title={t("Mark as done")}
+                             size="small" onClick={onTaskConfirm} color={'primary'} sx={{mr: 1}}>
+                    <CheckIcon/>
+                </RoundButton>
+                <RoundButton title={t("Cancel task")}
+                             size="small" onClick={onTaskCancel} color={'secondary'}>
+                    <CancelIcon/>
+                </RoundButton>
+            </>
+        )
+    } else {
+        buttons = (
+            <>
+                <RoundButton title={t("Edit task")}
+                             size="small" onClick={onTaskEdit} color={'primary'}>
+                    <EditIcon/>
+                </RoundButton>
+                <RoundButton title={t("Delete task")}
+                             size="small" onClick={onTaskDelete} color={'error'} sx={{ml: 1}}>
+                    <DeleteIcon/>
+                </RoundButton>
+            </>
+        )
+    }
     return (
         <Card sx={{width: "280px"}}>
             <CardContent>
-                    <DynamicIcon type={'tasks'} name={task.icon} color={stringToColor(task.action)}/>
-                    <Typography variant="body2">
-                        {task.action}
-                    </Typography>
+                <DynamicIcon type={'tasks'} name={task.icon} color={stringToColor(task.action)}/>
+                <Typography variant="body2">
+                    {task.action}
+                </Typography>
             </CardContent>
             <CardActions disableSpacing={true}>
                 <CasinoIcon color={"disabled"}/>{task.points}
                 <Box sx={{flexGrow: 1}}/>
-                <RoundButton size="small" onClick={onTaskEdit} color={'primary'}>
-                    <EditIcon/>
-                </RoundButton>
-
-                <RoundButton size="small" onClick={onTaskDelete} color={'error'} sx={{ml:1}}>
-                    <DeleteIcon/>
-                </RoundButton>
+                {buttons}
             </CardActions>
         </Card>);
 }

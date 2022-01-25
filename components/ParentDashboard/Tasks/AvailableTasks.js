@@ -10,13 +10,21 @@ import {Fab, Grid} from "@mui/material";
 import ResponsiveDialog from "../../UI/ResponsiveDialog";
 import {Loader} from "../../UI/Loader";
 import {useDeleteConfirm} from "../../../hooks/useDeleteConfirm";
-import {apiCreateTask, apiDeleteTask, apiGetAvailableTasks, apiGetTask, apiUpdateTask} from "../../../utils/api";
+import {
+    apiCancelTask,
+    apiConfirmTask,
+    apiCreateTask,
+    apiDeleteTask,
+    apiGetAvailableTasks,
+    apiGetTask,
+    apiUpdateTask
+} from "../../../utils/api";
 import {TaskCard} from "./TaskCard";
 import {TaskEditor} from "./TaskEditor";
 import {TaskFilter} from "./TaskFilter";
 
 export const AvailableTasks = ({user: kid}) => {
-        const [token, status] = useToken()
+        const [token, _, user] = useToken()
         const [tasks, setTasks] = useState(null)
         const [dateRange, setDateRange] = useState({
             dateFrom: new Date(),
@@ -29,17 +37,21 @@ export const AvailableTasks = ({user: kid}) => {
 
         useEffect(() => {
             if (token) reload()
-        }, [token])
+        }, [token, reload])
 
 
         const reload = () => {
-            if (token) apiGetAvailableTasks(token, kid.id, dateRange.dateFrom, dateRange.dateTo)
-                .then(data => {
-                    setTasks(data.tasks)
-                })
-                .catch(e => {
-                    showToast(ERROR_MSG, e.message)
-                }).finally(() => setLoading(false))
+            console.log('task reload1')
+            if (token) {
+                console.log('task reload2')
+                apiGetAvailableTasks(token, kid.id, dateRange.dateFrom, dateRange.dateTo)
+                    .then(data => {
+                        setTasks(data.tasks)
+                    })
+                    .catch(e => {
+                        showToast(ERROR_MSG, e.message)
+                    }).finally(() => setLoading(false))
+            }
         };
 
         if (loading || !token) return <Loader/>
@@ -106,6 +118,26 @@ export const AvailableTasks = ({user: kid}) => {
             })
         };
 
+        const handleTaskConfirm = async (id) => {
+            try {
+                await apiConfirmTask(token, id)
+                showToast(SUCCESS_MSG, t("Task has been mark as done!"))
+                reload();
+            } catch (e) {
+                showToast(ERROR_MSG, e.message)
+            }
+        };
+
+        const handleTaskCancel = async (id) => {
+            try {
+                await apiCancelTask(token, id)
+                showToast(SUCCESS_MSG, t("Task has been cancelled!"))
+                reload();
+            } catch (e) {
+                showToast(ERROR_MSG, e.message)
+            }
+        };
+
         const handleDateChange = dateRange => {
             setDateRange({...dateRange})
             reload()
@@ -120,14 +152,21 @@ export const AvailableTasks = ({user: kid}) => {
                             <Grid item key={task.id}>
                                 <TaskCard task={task}
                                           onTaskEdit={() => handleTaskEdit(task.id)}
-                                          onTaskDelete={() => handleTaskDelete(task.id)}/>
+                                          onTaskDelete={() => handleTaskDelete(task.id)}
+                                          onTaskConfirm={() => handleTaskConfirm(task.id)}
+                                          onTaskCancel={() => handleTaskCancel(task.id)}
+                                />
                             </Grid>
                         ))}
                     </Grid>
                 </Box>
-                <Fab color={"primary"} sx={{position: "fixed", bottom: "2rem", right: "2rem"}} onClick={handleTaskAdd}>
-                    <AddIcon/>
-                </Fab>
+                {user.role !== "kid" &&
+                    <Fab title={t("Add new task")}
+                         color={"primary"} sx={{position: "fixed", bottom: "2rem", right: "2rem"}}
+                         onClick={handleTaskAdd}>
+                        <AddIcon/>
+                    </Fab>
+                }
                 {dialog && <ResponsiveDialog open={true} title={dialog.title} onClose={handleDialogClose}>
                     {dialog.component}
                 </ResponsiveDialog>}

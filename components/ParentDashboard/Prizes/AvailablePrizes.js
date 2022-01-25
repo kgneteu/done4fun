@@ -4,7 +4,6 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "next-i18next";
 import {apiCreatePrize, apiDeletePrize, apiGetAvailablePrizes, apiGetPrize, apiUpdatePrize} from "../../../utils/api";
 import {ERROR_MSG, showToast, SUCCESS_MSG} from "../../../utils/toasts";
-import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import {grey} from "@mui/material/colors";
@@ -12,10 +11,8 @@ import {Fab, Grid} from "@mui/material";
 import {PrizeCard} from "./PrizeCard";
 import ResponsiveDialog from "../../UI/ResponsiveDialog";
 import {PrizeEditor} from "./PrizeEditor";
-import Typography from "@mui/material/Typography";
 import {Loader} from "../../UI/Loader";
 import {useDeleteConfirm} from "../../../hooks/useDeleteConfirm";
-import {sleep} from "../../../utils/form-tools";
 
 export const AvailablePrizes = ({user: kid}) => {
         const [token, status] = useToken()
@@ -30,13 +27,17 @@ export const AvailablePrizes = ({user: kid}) => {
 
 
         const reload = () => {
-            if (token) apiGetAvailablePrizes(token, kid.id)
-                .then(data => {
-                    setPrizes(data.prizes)
-                })
-                .catch(e => {
-                    showToast(ERROR_MSG, e.message)
-                }).finally(() => setLoading(false))
+            console.log('pr reload1')
+            if (token) {
+                console.log('pr reload2')
+                apiGetAvailablePrizes(token, kid.id)
+                    .then(data => {
+                        setPrizes(data.prizes)
+                    })
+                    .catch(e => {
+                        showToast(ERROR_MSG, e.message)
+                    }).finally(() => setLoading(false))
+            }
         };
 
         if (loading || !token) return <Loader/>

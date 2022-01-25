@@ -142,3 +142,11 @@ export async function apiUpdateTask(token, taskId, task) {
 export async function apiCreateTask(token, userId, task) {
     return await apiCall(`/auth/user/${userId}/task/create`, 'POST', token, task)
 }
+
+export async function apiConfirmTask(token, taskId) {
+    return await apiCall(`/auth/task/status/${taskId}/confirm`, 'POST', token,{time: new Date().toISOString()})
+}
+
+export async function apiCancelTask(token, taskId) {
+    return await apiCall(`/auth/task/status/${taskId}/cancel`, 'POST', token, {time: new Date().toISOString()})
+}

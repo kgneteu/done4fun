@@ -8,7 +8,7 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import IconButton from "@mui/material/IconButton";
 import {Paper} from "@mui/material";
 import {useTranslation} from "next-i18next";
-import {RoundButton} from "../ParentDashboard/Tasks/RoundButton";
+import {RoundButton} from "../UI/RoundButton";
 
 
 export const UserTable = ({users, pager, onUserDelete, onUserEdit, adminId}) => {

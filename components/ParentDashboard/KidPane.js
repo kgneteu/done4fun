@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useState} from "react";
 import {Loader} from "../UI/Loader";
-import {Button, Fab, Grid, Tab, Tabs} from "@mui/material";
+import {Fab, Grid, Tab, Tabs} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
 import * as PropTypes from "prop-types";
 import TabPanel from "../UI/TabPanel";
@@ -16,8 +16,7 @@ import StarIcon from '@mui/icons-material/Star';
 import Typography from "@mui/material/Typography";
 import {Board} from "../UI/Board";
 import {BoardHeader} from "../UI/BoardHeader";
-import {RoundButton} from "./Tasks/RoundButton";
-import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
 
 
 const KidPane = ({kid}) => {
@@ -47,15 +46,18 @@ const KidPane = ({kid}) => {
             </BoardHeader>
             <Board>
 
-
-                <Tabs value={activeTab} onChange={handleChange}
-                      variant="fullWidth"
-                >
-                    <Tab icon={<TaskAltIcon/>} label={t("Tasks")}/>
-                    <Tab icon={<EmojiEventsIcon/>} label={t("Prizes")}/>
-                </Tabs>
-
-
+                <AppBar position={'relative'}>
+                    <Tabs value={activeTab}
+                          onChange={handleChange}
+                          variant="fullWidth"
+                          indicatorColor="secondary"
+                          textColor="inherit"
+                          TabIndicatorProps={{sx: {height: "4px", backgroundColor: theme=>theme.palette["warning"].main}}}
+                    >
+                        <Tab icon={<TaskAltIcon/>} label={t("Tasks")} iconPosition={"start"}/>
+                        <Tab icon={<EmojiEventsIcon/>} label={t("Prizes")} iconPosition={"start"}/>
+                    </Tabs>
+                </AppBar>
                 <TabPanel index={0} value={activeTab}>
                     <TaskPane user={kid}/>
                 </TabPanel>

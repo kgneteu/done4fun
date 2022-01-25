@@ -1,8 +1,8 @@
-import {Fab} from "@mui/material";
+import {Fab, Tooltip} from "@mui/material";
 import * as React from "react";
 import * as PropTypes from "prop-types";
 
-export const RoundButton = ({color, children, sx, ...rest}) => {
+export const RoundButton = ({color, title, children, disabled, sx, ...rest}) => {
     const style = {
         color: theme => theme.palette[color].contrastText,
         bgcolor: theme => theme.palette[color].main,
@@ -13,8 +13,16 @@ export const RoundButton = ({color, children, sx, ...rest}) => {
             bgcolor: theme => theme.palette[color].dark,
         },
     };
+    let button = <Fab {...rest} disabled={disabled} sx={{...style, ...sx}}>{children}</Fab>;
+    if (title !== "" && !disabled) {
+        button = (
+            <Tooltip title={title} arrow>
+                {button}
+            </Tooltip>
+        )
+    }
     return (
-        <Fab {...rest} sx={{...style,...sx}}>{children}</Fab>
+        <>{button}</>
     )
 };
 
